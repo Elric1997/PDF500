@@ -12,7 +12,6 @@
     <input id="id" placeholder="Text">
 
     <input id="directory-in" placeholder="directory-in" type="file" webkitdirectory directory>
-    <input id="directory-out" placeholder="directory-in" type="file" webkitdirectory directory>
 
     <input id="font-x" placeholder="x">
     <input id="font-y" placeholder="y">
@@ -34,31 +33,38 @@
 <!-- Insert this line after script imports -->
 <script>if (window.module) module = window.module;</script>
 <script type="text/javascript">
-
-    let data = {
-        textId : document.getElementById('id').innerText,
-        directory:{
-            in: document.getElementById('id').innerText,
-            out: document.getElementById('id').innerText
-        },
-        font : {
-            x : document.getElementById('font-x').innerText,
-            y : document.getElementById('font-y').innerText,
-            size : document.getElementById('font-size').innerText,
-            color : document.getElementById('font-color').innerText
-        },
-        box: {
-            toggle: document.getElementById('box-toggle').innerText,
-            h: document.getElementById('box-h').innerText,
-            w: document.getElementById('box-w').innerText,
-            color: document.getElementById('box-color').innerText
-        }
-    }
-
     const ipcRenderer = require('electron').ipcRenderer;
-
     const signBtn = document.getElementById('sign');
+
     signBtn.addEventListener('click', function () {
+        let OutString = document.getElementById('directory-in').files[0].path;
+        let newOutString = OutString.replaceAll('\\', '/')
+        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
+
+        let inString = document.getElementById('directory-in').files[0].path;
+        let newinString = inString.replaceAll('\\', '/')
+        newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
+
+        let data = {
+            textId : document.getElementById('id').innerText,
+            directory:{
+                in: newinString,
+                out: newOutString
+            },
+            font : {
+                x : document.getElementById('font-x').innerText,
+                y : document.getElementById('font-y').innerText,
+                size : document.getElementById('font-size').innerText,
+                color : document.getElementById('font-color').innerText
+            },
+            box: {
+                toggle: document.getElementById('box-toggle').innerText,
+                h: document.getElementById('box-h').innerText,
+                w: document.getElementById('box-w').innerText,
+                color: document.getElementById('box-color').innerText
+            }
+        }
+
         ipcRenderer.send("sign", data);
     });
 </script>
