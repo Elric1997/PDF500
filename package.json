@@ -1,0 +1,16 @@
+{
+  "name": "pdf",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Thilo Barth",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^16.0.5",
+    "express": "^4.17.2",
+    "pdf-lib": "^1.17.1"
+  }
+}
