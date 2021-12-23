@@ -9,7 +9,21 @@
 
 <body>
 <main class="content-wraper" id="content-wraper">
-    <input id="text">
+    <input id="id" placeholder="Text">
+
+    <input id="directory-in" placeholder="directory-in" type="file" webkitdirectory directory>
+    <input id="directory-out" placeholder="directory-in" type="file" webkitdirectory directory>
+
+    <input id="font-x" placeholder="x">
+    <input id="font-y" placeholder="y">
+    <input id="font-size" placeholder="font-size">
+    <input id="font-color" placeholder="font-color">
+
+    <input id="box-toggle" placeholder="box-toggle" type="checkbox">
+    <input id="box-h" placeholder="box-h">
+    <input id="box-w" placeholder="box-w">
+    <input id="box-color" placeholder="box-color">
+
     <button id="sign">PDF´s beschreiben</button>
 </main>
 
@@ -21,11 +35,31 @@
 <script>if (window.module) module = window.module;</script>
 <script type="text/javascript">
 
+    let data = {
+        textId : document.getElementById('id').innerText,
+        directory:{
+            in: document.getElementById('id').innerText,
+            out: document.getElementById('id').innerText
+        },
+        font : {
+            x : document.getElementById('font-x').innerText,
+            y : document.getElementById('font-y').innerText,
+            size : document.getElementById('font-size').innerText,
+            color : document.getElementById('font-color').innerText
+        },
+        box: {
+            toggle: document.getElementById('box-toggle').innerText,
+            h: document.getElementById('box-h').innerText,
+            w: document.getElementById('box-w').innerText,
+            color: document.getElementById('box-color').innerText
+        }
+    }
+
     const ipcRenderer = require('electron').ipcRenderer;
 
     const signBtn = document.getElementById('sign');
     signBtn.addEventListener('click', function () {
-        ipcRenderer.send("sign");
+        ipcRenderer.send("sign", data);
     });
 </script>
 </body>

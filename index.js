@@ -71,6 +71,7 @@ app.on('window-all-closed', function () {
 })
 
 ipcMain.on("sign",function (event, arg) {
-    sniffDirec();
+    console.log(arg)
+    //sniffDirec();
 });
 
