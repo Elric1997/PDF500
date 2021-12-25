@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
+    <title>My desk app 0.0.1</title>
+
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+<main class="content-wrapper" id="content-wrapper">
+    <div class="dropdown">
+        <button class="dropbtn">Wechsel</button>
+        <div class="dropdown-content">
+            <a href="main.html">Hauptseite</a>
+            <a href="params.html">Parameter</a>
+        </div>
+    </div>
+    <section id="settings">
+        <img
+                src="assets/Logo.svg"
+                height="60"
+                width="90"
+                alt="SlickComm-Logo"
+                class="logo"
+        >
+        <div class="data">
+            <label>
+                <input type="text" class="data-field" placeholder="PDF-Nummer eintragen">
+            </label>
+        </div>
+        <div class="data btn-group">
+            <button type="button">Eingangsordner</button>
+            <button type="button">Ausgangsordner</button>
+        </div>
+        <div class="data">
+            <button type="button" class="single-button single-button--encouraging">PDF-Vorschau</button>
+        </div>
+    </section>
+    <section id="progress-data">
+        <div class="data">
+            <button type="button" class="single-button single-button--success">PDF beschreiben</button>
+        </div>
+        <div class="progress">
+            <div class="progress--fill"></div>
+            <span class="progress--text">50/100</span>
+        </div>
+    </section>
+    <footer>
+        <p class="creator">created by Thilo Barth | André Schwarzat</p>
+    </footer>
+</main>
+</body>
+</html>
