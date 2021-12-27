@@ -206,9 +206,8 @@
             cols[i].style.backgroundColor = 'blue';
         }
     }
-</script>
-<script>
-    const accordion = document.getElementsByClassName('progress-fill');
+
+    let accordion = document.getElementsByClassName('progress-fill');
     let i;
     for (i = 0; i < 100; i++) {
         accordion[i].addEventListener('click', function () {
@@ -216,9 +215,9 @@
         })
     }
 
-    const notification = document.getElementById('notification');
-    const message = document.getElementById('message');
-    const restartButton = document.getElementById('restart-button');
+    let notification = document.getElementById('notification');
+    let message = document.getElementById('message');
+    let restartButton = document.getElementById('restart-button');
     ipcRenderer.on('update_available', () => {
         ipcRenderer.removeAllListeners('update_available');
         message.innerText = 'A new update is available. Downloading now...';
