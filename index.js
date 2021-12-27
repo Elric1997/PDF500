@@ -93,7 +93,7 @@ async function previewPDF(document, name, data) {
     return response
 }
 
-
+//LICENSE STUFF
 //LICENSE STUFF
 async function validateLicenseByActivationToken(token) {
     console.log('TOKEN ', token)
