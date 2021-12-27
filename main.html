@@ -20,11 +20,11 @@
         >
         <div class="data">
             <label>
-                <input type="text" class="data-field" placeholder="PDF-Nummer eintragen">
+                <input id="id" type="text" class="data-field" placeholder="PDF-Nummer eintragen">
             </label>
         </div>
         <div class="data">
-            <button type="button" class="single-button single-button--primary">Eingangsordner</button>
+            <input id="directory-in" placeholder="directory-in" type="file" class="single-button single-button--primary" webkitdirectory directory>
         </div>
     </section>
     <section id="set-params">
@@ -35,17 +35,22 @@
                     <div class="content">
                         <div class="data">
                             <label>
-                                <input type="text" class="data-field" placeholder="x Koordinate">
+                                <input id="font-x" type="text" class="data-field" placeholder="x Koordinate">
                             </label>
                         </div>
                         <div class="data">
                             <label>
-                                <input type="text" class="data-field" placeholder="y Koordinate">
+                                <input id="font-y" type="text" class="data-field" placeholder="y Koordinate">
                             </label>
                         </div>
                         <div class="data">
                             <label>
-                                <input type="text" class="data-field" placeholder="Farbe festlegen">
+                                <input id="font-color" type="text" class="data-field" placeholder="Farbe festlegen">
+                            </label>
+                        </div>
+                        <div class="data">
+                            <label>
+                                <input id="font-size" type="text" class="data-field" placeholder="größe festlegen">
                             </label>
                         </div>
                     </div>
@@ -59,18 +64,23 @@
                     <div class="content">
                         <div class="data">
                             <label>
-                                <input type="text" class="data-field" placeholder="Höhe festlegen">
-                            </label>
-                        </div>
-                        <div class="data">
-                            <label>
-                                <input type="text" class="data-field" placeholder="Breite festlegen">
-                            </label>
-                        </div>
-                        <div class="data">
-                            <label>
-                                <input type="checkbox" class="data-checkbox">
+                                <input id="box-toggle" type="checkbox" class="data-checkbox">
                                 Box aktivieren
+                            </label>
+                        </div>
+                        <div class="data">
+                            <label>
+                                <input id="box-h" type="text" class="data-field" placeholder="Höhe festlegen">
+                            </label>
+                        </div>
+                        <div class="data">
+                            <label>
+                                <input id="box-w" type="text" class="data-field" placeholder="Breite festlegen">
+                            </label>
+                        </div>
+                        <div class="data">
+                            <label>
+                                <input id="box-color" type="text" class="data-field" placeholder="Frabe festlegen">
                             </label>
                         </div>
                     </div>
@@ -78,27 +88,157 @@
             </div>
         </div>
     </section>
+    <section id="preview-section" style="text-align: center;">
+        <iframe id="pdf" style="width: 500px; height: 450px;"></iframe>
+    </section>
     <section id="progress-data">
         <div class="data">
-            <button type="button" class="single-button single-button--success">PDF beschreiben</button>
+            <button id="preview" type="button" class="single-button single-button--success">PDF Vorschau</button>
+        </div>
+        <div class="data">
+            <button id="sign" type="button" class="single-button single-button--success">PDF beschreiben</button>
         </div>
         <div class="progress">
-            <div class="progress--fill"></div>
-            <span class="progress--text">50/100</span>
+            <div class="progress--fill" id="progress-fill"></div>
+            <span class="progress--text">0/0</span>
         </div>
     </section>
+
+    <div id="notification" class="hidden">
+        <p id="message"></p>
+        <button id="close-button" onClick="closeNotification()">
+          Close
+        </button>
+        <button id="restart-button" onClick="restartApp()" class="hidden">
+          Restart
+        </button>
+    </div>
+
+
     <footer>
         <p class="creator">created by Thilo Barth | André Schwarzat</p>
     </footer>
 </main>
+<!-- Insert this line above script imports  -->
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+<!-- normal script imports etc  -->
+
+<!-- Insert this line after script imports -->
+<script>if (window.module) module = window.module;</script>
+<script type="text/javascript">
+    const ipcRenderer = require('electron').ipcRenderer;
+    const signBtn = document.getElementById('sign');
+    const previewBtn = document.getElementById('preview');
+
+    previewBtn.addEventListener('click', function() {
+        let OutString = document.getElementById('directory-in').files[0].path;
+        let newOutString = OutString.replaceAll('\\', '/')
+        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
+
+        let inString = document.getElementById('directory-in').files[0].path;
+        let newinString = inString.replaceAll('\\', '/')
+        newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
+
+        let data = {
+            textId : document.getElementById('id').value,
+            directory:{
+                in: newinString,
+                out: newOutString
+            },
+            font : {
+                x : document.getElementById('font-x').value,
+                y : document.getElementById('font-y').value,
+                size : document.getElementById('font-size').value,
+                color : document.getElementById('font-color').value
+            },
+            box: {
+                toggle: document.getElementById('box-toggle').value,
+                h: document.getElementById('box-h').value,
+                w: document.getElementById('box-w').value,
+                color: document.getElementById('box-color').value
+            }
+        }
+        ipcRenderer.send('preview', data);
+    })
+
+    signBtn.addEventListener('click', function () {
+        let OutString = document.getElementById('directory-in').files[0].path;
+        let newOutString = OutString.replaceAll('\\', '/')
+        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
+
+        let inString = document.getElementById('directory-in').files[0].path;
+        let newinString = inString.replaceAll('\\', '/')
+        newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
+
+        let data = {
+            textId : document.getElementById('id').value,
+            directory:{
+                in: newinString,
+                out: newOutString
+            },
+            font : {
+                x : document.getElementById('font-x').value,
+                y : document.getElementById('font-y').value,
+                size : document.getElementById('font-size').value,
+                color : document.getElementById('font-color').value
+            },
+            box: {
+                toggle: document.getElementById('box-toggle').value,
+                h: document.getElementById('box-h').value,
+                w: document.getElementById('box-w').value,
+                color: document.getElementById('box-color').value
+            }
+        }
+
+        ipcRenderer.send("sign", data);
+    });
+
+
+    ipcRenderer.on('asynchronous-reply', (event, arg) => {
+        //console.log(arg) // prints "pong"
+        let pdfDataUri = JSON.parse(arg)
+        document.getElementById('pdf').src = pdfDataUri;
+    })
+
+    function changeBGColor() {
+        var cols = document.getElementsByClassName('col1');
+        for(i = 0; i < cols.length; i++) {
+            cols[i].style.backgroundColor = 'blue';
+        }
+    }
+</script>
 <script>
-    const accordion = document.getElementsByClassName('contentBox');
+    const accordion = document.getElementsByClassName('progress-fill');
     let i;
-    for (i = 0; i < accordion.length; i++) {
+    for (i = 0; i < 100; i++) {
         accordion[i].addEventListener('click', function () {
             this.classList.toggle('active');
         })
     }
+
+    const notification = document.getElementById('notification');
+    const message = document.getElementById('message');
+    const restartButton = document.getElementById('restart-button');
+    ipcRenderer.on('update_available', () => {
+        ipcRenderer.removeAllListeners('update_available');
+        message.innerText = 'A new update is available. Downloading now...';
+        notification.classList.remove('hidden');
+    });
+
+    ipcRenderer.on('update_downloaded', () => {
+        ipcRenderer.removeAllListeners('update_downloaded');
+        message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
+        restartButton.classList.remove('hidden');
+        notification.classList.remove('hidden');
+    });
+
+    function closeNotification() {
+        notification.classList.add('hidden');
+    }
+    function restartApp() {
+        ipcRenderer.send('restart_app');
+    }
+
 </script>
 </body>
 </html>

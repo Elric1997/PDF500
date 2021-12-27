@@ -5,6 +5,7 @@ const {ipcMain} = require('electron')
 const path = require('path')
 const url = require('url');
 const { log } = require('console');
+const { autoUpdater } = require('electron-updater');
 
 function sniffDirec(){
     let files = fs.readdirSync(__dirname + '/in')
@@ -90,6 +91,7 @@ async function previewPDF(document, name, data) {
     return response
 }
 
+//MAIN APP STUFF
 
 app.on("ready", () => {
     const mainWindow = new BrowserWindow({
@@ -101,9 +103,13 @@ app.on("ready", () => {
             enableRemoteModule: true,
         },
     });
-    mainWindow.loadURL(`file://${__dirname}/index.html`);
+    mainWindow.loadURL(`file://${__dirname}/main.html`);
     mainWindow.webContents.openDevTools();
 });
+
+app.once('ready-to-show', () => {
+    autoUpdater.checkForUpdatesAndNotify();
+  });
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
@@ -114,6 +120,23 @@ app.on('window-all-closed', function () {
 ipcMain.on("sign",function (event, arg) {
     console.log(arg)
     //sniffDirec();
+});
+
+//AUTOUPDATE
+
+autoUpdater.on('update-available', () => {
+    mainWindow.webContents.send('update_available');
+});
+
+autoUpdater.on('update-downloaded', () => {
+    mainWindow.webContents.send('update_downloaded');
+});
+
+
+// IPC STUFF
+
+ipcMain.on('restart_app', () => {
+    autoUpdater.quitAndInstall();
 });
 
 ipcMain.on('preview', async function(event, args){
