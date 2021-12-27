@@ -11,7 +11,6 @@
   "author": "Thilo Barth",
   "license": "ISC",
   "dependencies": {
-    "electron": "^16.0.5",
     "electron-updater": "^4.6.1",
     "express": "^4.17.2",
     "pdf-lib": "^1.17.1"
@@ -19,5 +18,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Elric1997/PDF500.git"
+  },
+  "devDependencies": {
+    "electron": "^16.0.5",
+    "electron-builder": "^22.14.5"
   }
 }
