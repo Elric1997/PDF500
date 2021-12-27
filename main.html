@@ -10,13 +10,6 @@
 </head>
 <body>
 <main class="content-wrapper" id="content-wrapper">
-    <div class="dropdown">
-        <button class="dropbtn">Wechsel</button>
-        <div class="dropdown-content">
-            <a href="main.html">Hauptseite</a>
-            <a href="params.html">Parameter</a>
-        </div>
-    </div>
     <section id="settings">
         <img
                 src="assets/Logo.svg"
@@ -30,12 +23,59 @@
                 <input type="text" class="data-field" placeholder="PDF-Nummer eintragen">
             </label>
         </div>
-        <div class="data btn-group">
-            <button type="button">Eingangsordner</button>
-            <button type="button">Ausgangsordner</button>
+        <div class="data">
+            <button type="button" class="single-button single-button--primary">Eingangsordner</button>
+        </div>
+    </section>
+    <section id="set-params">
+        <div class="data">
+            <div class="accordion">
+                <div class="contentBox">
+                    <div class="label single-button">Parameter Schrift</div>
+                    <div class="content">
+                        <div class="data">
+                            <label>
+                                <input type="text" class="data-field" placeholder="x Koordinate">
+                            </label>
+                        </div>
+                        <div class="data">
+                            <label>
+                                <input type="text" class="data-field" placeholder="y Koordinate">
+                            </label>
+                        </div>
+                        <div class="data">
+                            <label>
+                                <input type="text" class="data-field" placeholder="Farbe festlegen">
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="data">
-            <button type="button" class="single-button single-button--encouraging">PDF-Vorschau</button>
+            <div class="accordion">
+                <div class="contentBox">
+                    <div class="label single-button">Parameter Box</div>
+                    <div class="content">
+                        <div class="data">
+                            <label>
+                                <input type="text" class="data-field" placeholder="Höhe festlegen">
+                            </label>
+                        </div>
+                        <div class="data">
+                            <label>
+                                <input type="text" class="data-field" placeholder="Breite festlegen">
+                            </label>
+                        </div>
+                        <div class="data">
+                            <label>
+                                <input type="checkbox" class="data-checkbox">
+                                Box aktivieren
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     <section id="progress-data">
@@ -51,5 +91,14 @@
         <p class="creator">created by Thilo Barth | André Schwarzat</p>
     </footer>
 </main>
+<script>
+    const accordion = document.getElementsByClassName('contentBox');
+    let i;
+    for (i = 0; i < accordion.length; i++) {
+        accordion[i].addEventListener('click', function () {
+            this.classList.toggle('active');
+        })
+    }
+</script>
 </body>
 </html>
