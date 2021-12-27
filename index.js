@@ -3,7 +3,8 @@ const fs = require('fs');
 const { app, BrowserWindow } = require('electron');
 const {ipcMain} = require('electron')
 const path = require('path')
-const url = require('url')
+const url = require('url');
+const { log } = require('console');
 
 function sniffDirec(){
     let files = fs.readdirSync(__dirname + '/in')
@@ -50,6 +51,46 @@ async function createPdf(document, name) {
     fs.writeFileSync('./out/' + name , await pdfDoc.save());
 }
 
+async function previewPDF(document, name, data) {
+    
+
+    existingPdfBytes = fs.readFileSync(__dirname + '/in/Test_PDF.pdf', (err, data) => {
+        if(err) throw err;
+
+        return data
+    })
+
+    const pdfDoc = await PDFDocument.load(existingPdfBytes, {ignoreEncryption: true})
+
+    const pages = pdfDoc.getPages()
+    const firstPage = pages[0]
+    const { width, height } = firstPage.getSize()
+    const fontSize = parseInt(data.font.size)
+    firstPage.drawRectangle({
+        x: parseInt(data.font.x),
+        y: height - 2.5 * fontSize,
+        width: parseInt(data.box.w),
+        height: parseInt(data.box.h),
+        borderWidth: 1,
+        borderColor: rgb(1,0,0),
+        color: rgb(1,1,1),
+    });
+
+    firstPage.drawText(data.textId, {
+        x: parseInt(data.font.x),
+        y: height - 2 * fontSize,
+        size: fontSize,
+        //font: timesRomanFont,
+        color: rgb(0, 0, 0),
+    })
+
+    //fs.writeFileSync('./out/' + name , await pdfDoc.save());
+    const pdfDataUri = await pdfDoc.saveAsBase64({ dataUri: true });
+    let response = JSON.stringify(pdfDataUri)
+    return response
+}
+
+
 app.on("ready", () => {
     const mainWindow = new BrowserWindow({
         width: 1000,
@@ -68,10 +109,14 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
         app.quit()
     }
-})
+});
 
 ipcMain.on("sign",function (event, arg) {
     console.log(arg)
     //sniffDirec();
 });
+
+ipcMain.on('preview', async function(event, args){
+    event.reply('asynchronous-reply', await previewPDF('', '', args))
+})
 

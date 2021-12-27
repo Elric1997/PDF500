@@ -24,6 +24,10 @@
     <input id="box-color" placeholder="box-color">
 
     <button id="sign">PDF´s beschreiben</button>
+
+    <iframe id="pdf" style="width: 100%; height: 100%;"></iframe>
+
+    <button id="preview">PDF´s Vorschau</button>
 </main>
 
 <!-- Insert this line above script imports  -->
@@ -35,6 +39,38 @@
 <script type="text/javascript">
     const ipcRenderer = require('electron').ipcRenderer;
     const signBtn = document.getElementById('sign');
+    const previewBtn = document.getElementById('preview');
+
+    previewBtn.addEventListener('click', function() {
+        let OutString = document.getElementById('directory-in').files[0].path;
+        let newOutString = OutString.replaceAll('\\', '/')
+        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
+
+        let inString = document.getElementById('directory-in').files[0].path;
+        let newinString = inString.replaceAll('\\', '/')
+        newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
+
+        let data = {
+            textId : document.getElementById('id').value,
+            directory:{
+                in: newinString,
+                out: newOutString
+            },
+            font : {
+                x : document.getElementById('font-x').value,
+                y : document.getElementById('font-y').value,
+                size : document.getElementById('font-size').value,
+                color : document.getElementById('font-color').value
+            },
+            box: {
+                toggle: document.getElementById('box-toggle').value,
+                h: document.getElementById('box-h').value,
+                w: document.getElementById('box-w').value,
+                color: document.getElementById('box-color').value
+            }
+        }
+        ipcRenderer.send('preview', data);
+    })
 
     signBtn.addEventListener('click', function () {
         let OutString = document.getElementById('directory-in').files[0].path;
@@ -46,27 +82,34 @@
         newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
 
         let data = {
-            textId : document.getElementById('id').innerText,
+            textId : document.getElementById('id').value,
             directory:{
                 in: newinString,
                 out: newOutString
             },
             font : {
-                x : document.getElementById('font-x').innerText,
-                y : document.getElementById('font-y').innerText,
-                size : document.getElementById('font-size').innerText,
-                color : document.getElementById('font-color').innerText
+                x : document.getElementById('font-x').value,
+                y : document.getElementById('font-y').value,
+                size : document.getElementById('font-size').value,
+                color : document.getElementById('font-color').value
             },
             box: {
-                toggle: document.getElementById('box-toggle').innerText,
-                h: document.getElementById('box-h').innerText,
-                w: document.getElementById('box-w').innerText,
-                color: document.getElementById('box-color').innerText
+                toggle: document.getElementById('box-toggle').value,
+                h: document.getElementById('box-h').value,
+                w: document.getElementById('box-w').value,
+                color: document.getElementById('box-color').value
             }
         }
 
         ipcRenderer.send("sign", data);
     });
+
+
+    ipcRenderer.on('asynchronous-reply', (event, arg) => {
+        //console.log(arg) // prints "pong"
+        let pdfDataUri = JSON.parse(arg)
+        document.getElementById('pdf').src = pdfDataUri;
+    })
 </script>
 </body>
 </html>
