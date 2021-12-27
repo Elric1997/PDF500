@@ -5,7 +5,9 @@ const {ipcMain} = require('electron')
 const path = require('path')
 const url = require('url');
 const { log } = require('console');
+const fetch = require("node-fetch")
 const { autoUpdater } = require('electron-updater');
+
 
 function sniffDirec(){
     let files = fs.readdirSync(__dirname + '/in')
@@ -55,7 +57,7 @@ async function createPdf(document, name) {
 async function previewPDF(document, name, data) {
     
 
-    existingPdfBytes = fs.readFileSync(__dirname + '/in/Test_PDF.pdf', (err, data) => {
+    let existingPdfBytes = fs.readFileSync(__dirname + '/in/Test_PDF.pdf', (err, data) => {
         if(err) throw err;
 
         return data
@@ -91,12 +93,76 @@ async function previewPDF(document, name, data) {
     return response
 }
 
+
+//LICENSE STUFF
+async function validateLicenseByActivationToken(token) {
+    console.log('TOKEN ', token)
+    const licenseResponse = await fetch('https://api.keygen.sh/v1/accounts/4b46b331-a8c6-414b-88ec-e8a89d879008/me', { headers: { authorization: `Bearer ${token}` } })
+    const licensePayload = await licenseResponse.json()
+    if (licensePayload.errors) {
+        console.log("licensePayload ",licensePayload.errors)
+    }
+
+    const validateResponse = await fetch(`https://api.keygen.sh/v1/accounts/4b46b331-a8c6-414b-88ec-e8a89d879008/licenses/${licensePayload.data.id}/actions/validate`, { method: 'POST', headers: { authorization: `Bearer ${token}` } })
+    const validatePayload = await validateResponse.json()
+    if (validatePayload.errors) {
+        console.log("validatePayload ", validatePayload.errors)
+    }
+
+    return validatePayload.meta.constant
+}
+
+async function gateCreateWindowWithLicense(createWindow) {
+    const gateWindow = new BrowserWindow({
+        resizable: false,
+        frame: false,
+        width: 420,
+        height: 200,
+        webPreferences: {
+            preload: path.join(__dirname, 'gate.js'),
+            devTools: true,
+        },
+    })
+
+    gateWindow.loadFile('gate.html')
+
+
+    ipcMain.on('GATE_SUBMIT', async (_event, { token }) => {
+        const code = await validateLicenseByActivationToken(token)
+
+        switch (code) {
+            case 'VALID':
+                // Close the license gate window
+                gateWindow.close()
+
+                // Create our main window
+                createWindow()
+                console.log('valid')
+                break
+            case 'EXPIRED':
+                // Close the license gate window
+                console.log('expired')
+                gateWindow.close()
+            default:
+                // Exit the application
+                app.exit(1)
+
+                break
+        }
+    })
+}
+
 //MAIN APP STUFF
 
-app.on("ready", () => {
+function MainWindow() {
     const mainWindow = new BrowserWindow({
         width: 1000,
         height: 600,
+        minHeight: 600,
+        minWidth: 1000,
+        icon: `${__dirname}/assets/Logo.png`,
+        title: "Slick-PDF500",
+        autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -104,7 +170,7 @@ app.on("ready", () => {
         },
     });
     mainWindow.loadURL(`file://${__dirname}/main.html`);
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     mainWindow.once('ready-to-show', () => {
         console.log('looking for update')
@@ -120,7 +186,11 @@ app.on("ready", () => {
     autoUpdater.on('update-downloaded', () => {
         mainWindow.webContents.send('update_downloaded');
     });
-});
+}
+
+//Create MAIN WINDOW
+
+app.whenReady().then(() => gateCreateWindowWithLicense(MainWindow));
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
