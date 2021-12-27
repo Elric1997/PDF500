@@ -108,7 +108,17 @@ app.on("ready", () => {
 
     mainWindow.once('ready-to-show', () => {
         console.log('looking for update')
-        autoUpdater.checkForUpdatesAndNotify();
+        autoUpdater.checkForUpdates();
+    });
+
+    //AUTOUPDATE
+
+    autoUpdater.on('update-available', () => {
+        mainWindow.webContents.send('update_available');
+    });
+
+    autoUpdater.on('update-downloaded', () => {
+        mainWindow.webContents.send('update_downloaded');
     });
 });
 
@@ -118,23 +128,12 @@ app.on('window-all-closed', function () {
     }
 });
 
+// IPC STUFF
+
 ipcMain.on("sign",function (event, arg) {
     console.log(arg)
     //sniffDirec();
 });
-
-//AUTOUPDATE
-
-autoUpdater.on('update-available', () => {
-    mainWindow.webContents.send('update_available');
-});
-
-autoUpdater.on('update-downloaded', () => {
-    mainWindow.webContents.send('update_downloaded');
-});
-
-
-// IPC STUFF
 
 ipcMain.on('restart_app', () => {
     autoUpdater.quitAndInstall();
