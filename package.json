@@ -13,6 +13,7 @@
   "dependencies": {
     "electron-updater": "^4.6.1",
     "express": "^4.17.2",
+    "node-fetch": "^2.6.6",
     "pdf-lib": "^1.17.1"
   },
   "repository": {
