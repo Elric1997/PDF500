@@ -130,6 +130,31 @@
     const signBtn = document.getElementById('sign');
     const previewBtn = document.getElementById('preview');
 
+    let notification = document.getElementById('notification');
+    let message = document.getElementById('message');
+    let restartButton = document.getElementById('restart-button');
+
+    ipcRenderer.on('update_available', () => {
+        ipcRenderer.removeAllListeners('update_available');
+        message.innerText = 'A new update is available. Downloading now...';
+        notification.classList.remove('hidden');
+    });
+
+    ipcRenderer.on('update_downloaded', () => {
+        ipcRenderer.removeAllListeners('update_downloaded');
+        message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
+        restartButton.classList.remove('hidden');
+        notification.classList.remove('hidden');
+    });
+
+    function closeNotification() {
+        notification.classList.add('hidden');
+    }
+    function restartApp() {
+        ipcRenderer.send('restart_app');
+    }
+
+
     previewBtn.addEventListener('click', function() {
         let OutString = document.getElementById('directory-in').files[0].path;
         let newOutString = OutString.replaceAll('\\', '/')
@@ -207,36 +232,6 @@
         }
     }
 
-    let accordion = document.getElementsByClassName('progress-fill');
-    let i;
-    for (i = 0; i < 100; i++) {
-        accordion[i].addEventListener('click', function () {
-            this.classList.toggle('active');
-        })
-    }
-
-    let notification = document.getElementById('notification');
-    let message = document.getElementById('message');
-    let restartButton = document.getElementById('restart-button');
-    ipcRenderer.on('update_available', () => {
-        ipcRenderer.removeAllListeners('update_available');
-        message.innerText = 'A new update is available. Downloading now...';
-        notification.classList.remove('hidden');
-    });
-
-    ipcRenderer.on('update_downloaded', () => {
-        ipcRenderer.removeAllListeners('update_downloaded');
-        message.innerText = 'Update Downloaded. It will be installed on restart. Restart now?';
-        restartButton.classList.remove('hidden');
-        notification.classList.remove('hidden');
-    });
-
-    function closeNotification() {
-        notification.classList.add('hidden');
-    }
-    function restartApp() {
-        ipcRenderer.send('restart_app');
-    }
 
 </script>
 </body>

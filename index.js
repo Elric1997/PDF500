@@ -107,6 +107,7 @@ app.on("ready", () => {
     mainWindow.webContents.openDevTools();
 
     mainWindow.once('ready-to-show', () => {
+        console.log('looking for update')
         autoUpdater.checkForUpdatesAndNotify();
     });
 });
