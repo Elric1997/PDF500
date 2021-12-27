@@ -105,11 +105,11 @@ app.on("ready", () => {
     });
     mainWindow.loadURL(`file://${__dirname}/main.html`);
     mainWindow.webContents.openDevTools();
-});
 
-app.once('ready-to-show', () => {
-    autoUpdater.checkForUpdatesAndNotify();
-  });
+    mainWindow.once('ready-to-show', () => {
+        autoUpdater.checkForUpdatesAndNotify();
+    });
+});
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
