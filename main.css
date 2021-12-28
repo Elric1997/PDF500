@@ -62,14 +62,18 @@ h2 {
 }
 
 /* General Styles */
-.logo {
+.slick-comm-logo {
     width: 100%;
     margin: 1.5rem 0 0.5rem 0;
     text-align: center;
 }
 
-.logo--animation {
+.slick-comm-logo--animation {
     animation: pulse 1s linear infinite;
+}
+
+.slick-comm-icon {
+    padding-top: 0.2rem;
 }
 
 @-webkit-keyframes pulse {
@@ -132,6 +136,10 @@ input[type=text]:focus{
 
 .button--success {
     background: #05A660;
+}
+
+.button--error {
+    background: #E53535;
 }
 
 .button--encouraging {
@@ -213,7 +221,20 @@ input[type="file"] {color: white}
     text-align: center;
 }
 
-/* loading.html */
-.verify-info {
+.notification {
+    width: 15rem;
+    height: 25%;
+    background-color: #FAFAFC;
+    box-shadow: 0 0 6px 4px rgba(85, 87, 112, 0.25);
+    margin: 1rem;
+    padding: 0.5rem 0.5rem;
+    border: 2px solid #555770;
+    border-radius: 5px;
+}
+
+/* u.a. in loading.html */
+.info-message {
     font-size: 1.1rem;
+    background: none;
+    margin-bottom: 1rem;
 }

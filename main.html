@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="main.css">
-    <title>SlickPDF</title>
+    <title>SlickCommPDF</title>
 </head>
 <body>
 <main class="content-wrapper" id="content-wrapper">
@@ -94,17 +94,19 @@
         </div>
     </section>
     <!-- Update-Popup -->
-    <div id="notification" class="hidden">
-        <p id="message"></p>
-        <button id="close-button" onClick="closeNotification()">
-            Close
+    <div id="notification" class="notification hidden">
+        <p id="message" class="info-message">Hallo, ich bin ein neues Update! Bitte führe mich aus!</p>
+        <button id="restart-button" style="width: 5rem; height: 2rem; margin-left: 3rem" onClick="restartApp()" class="button button--primary hidden">
+            Ausführen
         </button>
-        <button id="restart-button" onClick="restartApp()" class="hidden">
-            Restart
+        <button id="close-button" style="width: 5rem; height: 2rem" class="button button--error" onClick="closeNotification()">
+            Schließen
         </button>
     </div>
     <footer style="bottom: 0;">
-        <p class="creator">created by Thilo Barth | André Schwarzat</p>
+        <p class="creator">created by Thilo Barth | André Schwarzat with
+            <img src="assets/Logo.svg" class="slick-comm-icon" height="14" width="14" alt="Slick-Icon">
+        </p>
     </footer>
 </main>
 <!-- Insert this line above script imports  -->
