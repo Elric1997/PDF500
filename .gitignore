@@ -1,6 +1,7 @@
 # Project exclude paths
 /node_modules/
 /dist/
+config.json
 electron-builder.yml
 dev-app-update.yml
 /dist/win-unpacked/locales/am.pak

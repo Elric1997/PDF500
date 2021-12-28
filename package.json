@@ -11,6 +11,8 @@
   "author": "Thilo Barth",
   "license": "ISC",
   "dependencies": {
+    "electron-json-storage": "^4.5.0",
+    "electron-store": "^8.0.1",
     "electron-updater": "^4.6.1",
     "express": "^4.17.2",
     "node-fetch": "^2.6.6",

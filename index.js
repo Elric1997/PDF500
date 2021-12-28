@@ -7,6 +7,8 @@ const url = require('url');
 const { log } = require('console');
 const fetch = require("node-fetch")
 const { autoUpdater } = require('electron-updater');
+const Store = require('electron-store');
+
 
 
 function sniffDirec(){
@@ -93,45 +95,67 @@ async function previewPDF(document, name, data) {
     return response
 }
 
-//LICENSE STUFF
+
 //LICENSE STUFF
 async function validateLicenseByActivationToken(token) {
-    console.log('TOKEN ', token)
-    const licenseResponse = await fetch('https://api.keygen.sh/v1/accounts/4b46b331-a8c6-414b-88ec-e8a89d879008/me', { headers: { authorization: `Bearer ${token}` } })
-    const licensePayload = await licenseResponse.json()
-    if (licensePayload.errors) {
-        console.log("licensePayload ",licensePayload.errors)
-    }
-
-    const validateResponse = await fetch(`https://api.keygen.sh/v1/accounts/4b46b331-a8c6-414b-88ec-e8a89d879008/licenses/${licensePayload.data.id}/actions/validate`, { method: 'POST', headers: { authorization: `Bearer ${token}` } })
-    const validatePayload = await validateResponse.json()
-    if (validatePayload.errors) {
-        console.log("validatePayload ", validatePayload.errors)
-    }
-
-    return validatePayload.meta.constant
+    const res = await fetch('https://api.keygen.sh/v1/accounts/4b46b331-a8c6-414b-88ec-e8a89d879008/licenses/actions/validate-key', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/vnd.api+json',
+        'Accept': 'application/vnd.api+json'
+    },
+    body: JSON.stringify({
+        meta: {
+        key: token
+        }
+    })
+    })
+    
+    const { meta } = await res.json()
+    console.log(meta.valid);
+    return meta.valid
 }
 
-async function gateCreateWindowWithLicense(createWindow) {
-    const gateWindow = new BrowserWindow({
-        resizable: false,
-        frame: false,
-        width: 420,
-        height: 200,
-        webPreferences: {
-            preload: path.join(__dirname, 'gate.js'),
-            devTools: true,
-        },
-    })
+//TODO AUTO VALIDATE MUSS UNBEDING NOCH VERBESSERT WERDEN !!!!
 
-    gateWindow.loadFile('gate.html')
+async function gateCreateWindowWithLicense(createWindow) {
+
+    const store = new Store();
+    
+    //store.set('token', 123);
+
+    let gateWindow = new BrowserWindow({
+                resizable: false,
+                frame: true,
+                width: 420,
+                height: 200,
+                webPreferences: {
+                    preload: path.join(__dirname, 'gate.js'),
+                    devTools: true,
+                },
+            })
+        
+
+    console.log(store.get('token'));
+    let code = await validateLicenseByActivationToken(store.get('token'))
+    if(code == true){
+        gateWindow.close()
+        createWindow()
+    } else {
+        gateWindow.loadFile('gate.html')
+    }
 
 
     ipcMain.on('GATE_SUBMIT', async (_event, { token }) => {
-        const code = await validateLicenseByActivationToken(token)
+        store.set('token', token);
+        let code = await validateLicenseByActivationToken(store.get('token'))
+        validate(code, createWindow, gateWindow);
+    })
+}
 
+async function validate(code, createWindow, gateWindow){
         switch (code) {
-            case 'VALID':
+            case true:
                 // Close the license gate window
                 gateWindow.close()
 
@@ -139,17 +163,22 @@ async function gateCreateWindowWithLicense(createWindow) {
                 createWindow()
                 console.log('valid')
                 break
-            case 'EXPIRED':
+            case false:
                 // Close the license gate window
-                console.log('expired')
-                gateWindow.close()
+                console.log('false')
+                //gateWindow.close()
+                break
+            case undefined:
+                    // Close the license gate window
+                    console.log('undefined')
+                    //gateWindow.close()
+                    break
             default:
                 // Exit the application
                 app.exit(1)
 
                 break
         }
-    })
 }
 
 //MAIN APP STUFF
