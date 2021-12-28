@@ -9,23 +9,21 @@ const fetch = require("node-fetch")
 const { autoUpdater } = require('electron-updater');
 const Store = require('electron-store');
 
-
-
-function sniffDirec(){
-    let files = fs.readdirSync(__dirname + '/in')
+function sniffDirec(data){
+    console.log(data)
+    let files = fs.readdirSync(data.directory.in)
+    let outPath = data.directory.out;
+    console.log(files)
     files.forEach(function (file) {
-        fs.readFile(__dirname + '/in/' + file, (err,data) => {
+        fs.readFile(data.directory.in + '/' + file, (err,data) => {
             if(err) throw err;
-            createPdf(data, file)
+            createPdf(data, file, outPath)
         })
-
-        //console.log(doc); 
-        //createPdf(doc)
     });
 }
 
-async function createPdf(document, name) {
-    //console.log(document);
+async function createPdf(document, name, out) {
+    console.log(out);
     const existingPdfBytes = document;
     const pdfDoc = await PDFDocument.load(existingPdfBytes, {ignoreEncryption: true})
     //const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
@@ -53,13 +51,14 @@ async function createPdf(document, name) {
         color: rgb(0, 0, 0),
     })
 
-    fs.writeFileSync('./out/' + name , await pdfDoc.save());
+    fs.promises.mkdir(out, { recursive: true }).catch(console.error);
+    fs.writeFileSync(out + '/' + name , await pdfDoc.save(), { flag: 'wx' });
 }
 
 async function previewPDF(document, name, data) {
     
 
-    let existingPdfBytes = fs.readFileSync(__dirname + '/in/Test_PDF.pdf', (err, data) => {
+    let existingPdfBytes = fs.readFileSync(data.directory.in, (err, data) => {
         if(err) throw err;
 
         return data
@@ -231,7 +230,7 @@ app.on('window-all-closed', function () {
 
 ipcMain.on("sign",function (event, arg) {
     console.log(arg)
-    //sniffDirec();
+    sniffDirec(arg);
 });
 
 ipcMain.on('restart_app', () => {

@@ -1,3 +1,4 @@
+/* Standard Style*/
 * {
     margin: 0;
     padding: 0;
@@ -6,15 +7,59 @@
     font-family: "Roboto Light", "Jost", sans-serif;
 }
 
-/* General Style */
-.data {
+h2 {
+    font-size: 1.4rem;
+    font-weight: normal;
+    text-align: center;
+}
+
+/* Grid */
+.container {
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+[class*='col-'] {
+    float: left;
+    min-height: 1px;
+    padding: 0.8rem;
+}
+
+.col-1 {
+    width: 16.666%;
+}
+
+.col-2 {
+    width: 33.333%;
+}
+
+.col-3 {
+    width: 50%;
+}
+
+.col-6 {
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* General Styles */
+.logo {
+    width: 100%;
+    margin: 1.5rem 0 0.5rem 0;
+    text-align: center;
+}
+
 .data-field {
-    width: 15rem;
+    width: 17rem;
     height: 2.5rem;
     margin: 0.5rem;
     border: 1px solid #B9BABB;
@@ -36,48 +81,63 @@ input[type=text]:focus{
     font-size: 1.2em;
 }
 
-.single-button {
-    width: 15rem;
+.button {
+    width: 17rem;
     height: 2.5rem;
-    margin: 1rem;
-    font-size: 1.2rem;
+    border: none;
+    /*margin: 1rem;*/
+    font-size: 1rem;
     color: white;
     border-radius: 5px;
     cursor: pointer;
 }
 
-.single-button:hover {
-    border: 1px solid grey;
+.button:hover {
     background-color: grey;
+    transition: 1ms;
 }
 
-.creator {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-}
-
-/* Specific Style */
-#settings .logo {
-    width: 100%;
-    margin: 1.5rem 0 0.5rem 0;
-    text-align: center;
-}
-
-.single-button--primary {
-    border: 1px solid #0063F7;
+.button--primary {
     background: #0063F7;
 }
 
-.single-button--success {
-    margin-top: 1rem;
-    border: 1px solid #05A660;
+.button--success {
     background: #05A660;
 }
 
-.single-button--encouraging {
-    border: 1px solid #E57A00;
-    background-color: #E57A00;
+.button--encouraging {
+    background: #E57A00;
+}
+
+.upload-box {
+    font-size: 10rem;
+    background: white;
+    border-radius: 50px;
+    width: 350px;
+    outline: none;
+}
+
+input[type="file"] {color: white}
+
+::-webkit-file-upload-button {
+    color: #F2F2F5;
+    background: #e57a00;
+    margin: 0 1.2rem 0 0;
+    padding: 0.8rem;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+.data-checkbox {
+    margin: 0.3rem 0 0 0.3rem;
+}
+
+.pdf-preview {
+    border: 1px solid #B9BABB;
+    border-radius: 5px;
 }
 
 .progress {
@@ -90,11 +150,24 @@ input[type=text]:focus{
 }
 
 .progress--fill {
-    width: 1%;
+    width: 50%;
     height: 100%;
     border-radius: 0 5px 5px 0;
-    background: #0063F7;
+    background: repeating-linear-gradient(to right, #0063F7, #0063F7 10px, #007DFF 10px, #007DFF 20px);
+    background-size: 20px;
+    animation: move 0.9s linear infinite;
     transition: all 0.2s;
+}
+
+@keyframes move {
+    100% {
+        background-position: 40px 0;
+    }
+}
+
+.set-color {
+    background-color: #0063F7;
+    height: 100%;
 }
 
 .progress--text {
@@ -105,63 +178,8 @@ input[type=text]:focus{
     background: #C4C4C4;
 }
 
-input[type="checkbox"] {
-    width: 1rem;
-    height: 1rem;
-    cursor: pointer;
-    margin-top: 0.75rem;
-    margin-left: -7.5rem;
-}
-
-.accordion {
-    width: 18.5rem;
-}
-
-.accordion .contentBox {
-    position: relative;
-    margin: 10px 20px;
-}
-
-.accordion .contentBox .label {
-    position: relative;
-    margin: 6px;
-    padding: 0.3rem 0.5rem 0 0.5rem;
-    background: #0063F7;
-    color: #F2F2F5;
-    cursor: pointer;
-    border: none;
-}
-
-.accordion .contentBox .label::before {
+.creator {
     position: absolute;
-    content: '+';
-    right: 20px;
+    width: 100%;
+    text-align: center;
 }
-
-.accordion .contentBox .content {
-    position: relative;
-    padding: 0;
-    height: 0;
-    overflow: hidden;
-    transition: 0.2s;
-    overflow-y: auto;
-}
-
-.accordion .contentBox.active .content {
-    height: 100%;
-    padding: 10px;
-}
-
-#notification {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 200px;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  }
-  .hidden {
-    display: none;
-  }
