@@ -6,6 +6,7 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="example.css">
+    <!--<title>SlickComm-PDF</title>-->
 </head>
 <body>
     <main class="content-wrapper" id="content-wrapper">
@@ -87,8 +88,8 @@
                     <div class="col-6">
                         <button id="preview" type="button" class="button button--encouraging">PDF Vorschau</button>
                     </div>
-                    <div class="col-6">
-                        <iframe id="pdf" style="width: 500px; height: 450px;"></iframe>
+                    <div id="preview-section" class="col-6">
+                        <iframe id="pdf" class="pdf-preview" style="width: 500px; height: 450px;"></iframe>
                     </div>
                     <!--<section id="preview-section" style="text-align: center;">
                         <iframe id="pdf" style="width: 500px; height: 450px;"></iframe>
@@ -101,7 +102,7 @@
                 </div>
             </div>
             <div class="progress">
-                <div class="progress--fill" id="progress-fill"></div>
+                <div class="progress--fill set-color" id="progress-fill"></div>
                 <span class="progress--text">0/0</span>
             </div>
         </section>

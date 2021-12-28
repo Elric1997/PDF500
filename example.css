@@ -135,6 +135,11 @@ input[type="file"] {color: white}
     margin: 0.3rem 0 0 0.3rem;
 }
 
+.pdf-preview {
+    border: 1px solid #B9BABB;
+    border-radius: 5px;
+}
+
 .progress {
     position: relative;
     width: 100%;
@@ -145,11 +150,20 @@ input[type="file"] {color: white}
 }
 
 .progress--fill {
-    width: 1%;
+    width: 50%;
     height: 100%;
     border-radius: 0 5px 5px 0;
-    background: #0063F7;
+    /*background: #0063F7;*/
+    background: linear-gradient(45deg, rgba(255,255,255,0.5) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.5) 75%, transparent 75%, transparent 75%);
+    background-size: 40px;
+    animation: move 0.5s;
     transition: all 0.2s;
+}
+
+.set-color {
+    background-color: #0063F7;
+    width: 65%;
+    height: 100%;
 }
 
 .progress--text {
