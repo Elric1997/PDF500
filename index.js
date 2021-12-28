@@ -127,13 +127,16 @@ async function gateCreateWindowWithLicense(createWindow) {
                 resizable: false,
                 frame: true,
                 width: 420,
-                height: 200,
+                height: 350,
+                icon: `${__dirname}/assets/Logo.png`,
+                autoHideMenuBar: true,
                 webPreferences: {
                     preload: path.join(__dirname, 'gate.js'),
                     devTools: true,
                 },
             })
-        
+
+    gateWindow.loadFile('loading.html')
 
     console.log(store.get('token'));
     let code = await validateLicenseByActivationToken(store.get('token'))
