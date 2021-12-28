@@ -13,6 +13,16 @@ h2 {
     text-align: center;
 }
 
+.gate-label {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: -0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
 /* Grid */
 .container {
     width: 95%;
@@ -56,6 +66,25 @@ h2 {
     width: 100%;
     margin: 1.5rem 0 0.5rem 0;
     text-align: center;
+}
+
+.logo--animation {
+    animation: pulse 1s linear infinite;
+}
+
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+    50% {
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+    }
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
 }
 
 .data-field {
@@ -182,4 +211,9 @@ input[type="file"] {color: white}
     position: absolute;
     width: 100%;
     text-align: center;
+}
+
+/* loading.html */
+.verify-info {
+    font-size: 1.1rem;
 }
