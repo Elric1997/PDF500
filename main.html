@@ -9,7 +9,7 @@
 </head>
 <body>
 <main class="content-wrapper" id="content-wrapper">
-    <section id="settings">
+    <header>
         <img
                 src="assets/Logo.svg"
                 height="60"
@@ -17,104 +17,95 @@
                 alt="SlickComm-Logo"
                 class="logo"
         >
-        <div class="data">
-            <label>
-                <input id="id" type="text" class="data-field" placeholder="PDF-Nummer eintragen">
-            </label>
-        </div>
-        <div class="data">
-            <input id="directory-in" placeholder="directory-in" type="file" class="single-button single-button--primary" webkitdirectory directory>
-        </div>
-    </section>
-    <section id="set-params">
-        <div class="data">
-            <div class="accordion">
-                <div class="contentBox">
-                    <div class="label single-button">Parameter Schrift</div>
+    </header>
+    <section class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <label>
+                        <input id="id" type="text" class="data-field" placeholder="PDF-Nummer eintragen">
+                    </label>
+                </div>
+                <div class="col-6">
+                    <input id="directory-in" class="button button--primary" placeholder="directory-in" type="file" accept="application/pdf">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3" style="justify-content: right; display: flex">
                     <div class="content">
-                        <div class="data">
+                        <h2>Schrift-Parameter</h2>
+                        <div class="data-input">
                             <label>
-                                <input id="font-x" type="text" class="data-field" placeholder="x Koordinate">
+                                <input id="font-x" type="text" class="data-field" placeholder="x-Koordinate">
                             </label>
                         </div>
-                        <div class="data">
+                        <div class="data-input">
                             <label>
-                                <input id="font-y" type="text" class="data-field" placeholder="y Koordinate">
+                                <input id="font-y" type="text" class="data-field" placeholder="y-Koordinate">
                             </label>
                         </div>
-                        <div class="data">
+                        <div class="data-input">
                             <label>
                                 <input id="font-color" type="text" class="data-field" placeholder="Farbe festlegen">
                             </label>
                         </div>
-                        <div class="data">
+                        <div class="data-input">
                             <label>
-                                <input id="font-size" type="text" class="data-field" placeholder="größe festlegen">
+                                <input id="font-size" type="text" class="data-field" placeholder="Größe festlegen">
                             </label>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="data">
-            <div class="accordion">
-                <div class="contentBox">
-                    <div class="label single-button">Parameter Box</div>
+                <div class="col-3" style="justify-content: left; display: flex;">
                     <div class="content">
-                        <div class="data">
+                        <h2>Box-Parameter</h2>
+                        <div class="data-checkbox">
                             <label>
                                 <input id="box-toggle" type="checkbox" class="data-checkbox">
                                 Box aktivieren
                             </label>
                         </div>
-                        <div class="data">
+                        <div class="data-input">
                             <label>
                                 <input id="box-h" type="text" class="data-field" placeholder="Höhe festlegen">
                             </label>
                         </div>
-                        <div class="data">
+                        <div class="data-input">
                             <label>
                                 <input id="box-w" type="text" class="data-field" placeholder="Breite festlegen">
                             </label>
                         </div>
-                        <div class="data">
+                        <div class="data-input">
                             <label>
-                                <input id="box-color" type="text" class="data-field" placeholder="Frabe festlegen">
+                                <input id="box-color" type="text" class="data-field" placeholder="Farbe festlegen">
                             </label>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <section id="preview-section" style="text-align: center;">
-        <iframe id="pdf" style="width: 500px; height: 450px;"></iframe>
-    </section>
-    <section id="progress-data">
-        <div class="data">
-            <button id="preview" type="button" class="single-button single-button--success">PDF Vorschau</button>
-        </div>
-        <div class="data">
-            <button id="sign" type="button" class="single-button single-button--success">PDF beschreiben</button>
+            <div class="row">
+                <div class="col-6">
+                    <button id="preview" type="button" class="button button--encouraging">PDF Vorschau</button>
+                </div>
+                <div id="preview-section" class="col-6">
+                    <iframe id="pdf" class="pdf-preview" style="width: 500px; height: 450px;"></iframe>
+                </div>
+                <!--<section id="preview-section" style="text-align: center;">
+                    <iframe id="pdf" style="width: 500px; height: 450px;"></iframe>
+                </section>-->
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button id="sign" type="button" class="button button--success">PDF beschreiben</button>
+                </div>
+            </div>
         </div>
         <div class="progress">
-            <div class="progress--fill" id="progress-fill"></div>
+            <div class="progress--fill set-color" id="progress-fill"></div>
             <span class="progress--text">0/0</span>
         </div>
     </section>
-
-    <div id="notification" class="hidden">
-        <p id="message"></p>
-        <button id="close-button" onClick="closeNotification()">
-          Close
-        </button>
-        <button id="restart-button" onClick="restartApp()" class="hidden">
-          Restart
-        </button>
-    </div>
-
-
-    <footer>
+    <footer style="bottom: 0;">
         <p class="creator">created by Thilo Barth | André Schwarzat</p>
     </footer>
 </main>
@@ -230,8 +221,6 @@
             cols[i].style.backgroundColor = 'blue';
         }
     }
-
-
 </script>
 </body>
 </html>
