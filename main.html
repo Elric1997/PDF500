@@ -3,21 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300' rel='stylesheet' type='text/css'>
 
     <link rel="stylesheet" href="main.css">
+    <title>SlickPDF</title>
 </head>
 <body>
 <main class="content-wrapper" id="content-wrapper">
-    <header>
-        <img
-                src="assets/Logo.svg"
-                height="60"
-                width="90"
-                alt="SlickComm-Logo"
-                class="logo"
-        >
-    </header>
     <section class="content">
         <div class="container">
             <div class="row">
@@ -90,9 +81,6 @@
                 <div id="preview-section" class="col-6">
                     <iframe id="pdf" class="pdf-preview" style="width: 500px; height: 450px;"></iframe>
                 </div>
-                <!--<section id="preview-section" style="text-align: center;">
-                    <iframe id="pdf" style="width: 500px; height: 450px;"></iframe>
-                </section>-->
             </div>
             <div class="row">
                 <div class="col-6">
@@ -105,6 +93,16 @@
             <span class="progress--text">0/0</span>
         </div>
     </section>
+    <!-- Update-Popup -->
+    <div id="notification" class="hidden">
+        <p id="message"></p>
+        <button id="close-button" onClick="closeNotification()">
+            Close
+        </button>
+        <button id="restart-button" onClick="restartApp()" class="hidden">
+            Restart
+        </button>
+    </div>
     <footer style="bottom: 0;">
         <p class="creator">created by Thilo Barth | André Schwarzat</p>
     </footer>
@@ -143,7 +141,6 @@
     function restartApp() {
         ipcRenderer.send('restart_app');
     }
-
 
     previewBtn.addEventListener('click', function() {
         let OutString = document.getElementById('directory-in').files[0].path;

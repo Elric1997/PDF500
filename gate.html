@@ -1,18 +1,30 @@
-<html>
+<html lang="de">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv='Content-Security-Policy' content="default-src 'self'; script-src 'self'">
-    <title>License Gate</title>
-    <link rel='stylesheet' href='./index.css'>
+
+    <link rel='stylesheet' href='./main.css'>
+    <title>SlickPDF Lizenzabfrage</title>
 </head>
 <body>
-<form id='license-gate'>
-    <label for='token'>
-        Please enter your activation token666
-    </label>
-    <input name='token' type='text' placeholder='activ-XXXX'>
-    <button type='submit'>
-        Submit
-    </button>
-</form>
+<main>
+    <header>
+        <img src="assets/Logo.svg" height="60" width="90" alt="SlickComm-Logo" class="logo">
+    </header>
+    <form id='license-gate'>
+        <label for='token' class="gate-label">
+            Bitte Aktivierungs-Token eingeben
+        </label>
+        <div class="col-6">
+            <label>
+                <input name='token' class="data-field" type='text' placeholder='Aktivierungs-Token eingeben'>
+            </label>
+        </div>
+        <div class="col-6">
+            <button type='submit' class="button button--success">Absenden</button>
+        </div>
+    </form>
+</main>
 </body>
 </html>
