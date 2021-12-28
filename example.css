@@ -154,15 +154,28 @@ input[type="file"] {color: white}
     height: 100%;
     border-radius: 0 5px 5px 0;
     /*background: #0063F7;*/
-    background: linear-gradient(45deg, rgba(255,255,255,0.5) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.5) 75%, transparent 75%, transparent 75%);
-    background-size: 40px;
-    animation: move 0.5s;
+    /*background: linear-gradient(45deg, rgba(255,255,255,0.5) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.5) 75%, transparent 75%, transparent);*/
+    background: repeating-linear-gradient(
+            45deg,
+            #606dbc,
+            #606dbc 10px,
+            #465298 10px,
+            #465298 20px
+    );
+
+    background-size: 20px;
+    animation: move 0.5s linear infinite;
     transition: all 0.2s;
+}
+
+@keyframes move {
+    100% {
+        background-position: 40px 0;
+    }
 }
 
 .set-color {
     background-color: #0063F7;
-    width: 65%;
     height: 100%;
 }
 
