@@ -236,7 +236,7 @@ input[disabled][type=text]:hover {
     width: 50%;
     height: 100%;
     border-radius: 0 5px 5px 0;
-    background: repeating-linear-gradient(to right, #0063F7, #0063F7 10px, #007DFF 10px, #007DFF 20px);
+    background: repeating-linear-gradient(130deg, #0063F7 5px, #0063F7 12px, #007DFF 10px, #007DFF 20px);
     background-size: 20px;
     animation: move 0.9s linear infinite;
     transition: all 0.2s;
