@@ -240,4 +240,3 @@ ipcMain.on('restart_app', () => {
 ipcMain.on('preview', async function(event, args){
     event.reply('asynchronous-reply', await previewPDF('', '', args))
 })
-

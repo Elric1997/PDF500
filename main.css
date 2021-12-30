@@ -1,9 +1,18 @@
+:root {
+    --main-bg-color: #F2F2F5;
+    --main-color-primary: #0063F7;
+    --main-color-secondary: #8F90A6;
+    --main-color-success: #05A660;
+    --main-color-error: #E53535;
+    --main-color-encouraging: #E57A00
+}
+
 /* Standard Style*/
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #F2F2F5;
+    background-color: var(--main-bg-color);
     font-family: "Roboto Light", "Jost", sans-serif;
 }
 
@@ -100,18 +109,57 @@ h2 {
     padding-left: 1rem;
 }
 
-input:hover {
-    border-color: #0063F7;
+.data-color-field::-webkit-color-swatch-wrapper {
+    width: 10rem;
+    margin: 0.5rem 0 0 0.5rem;
+    padding: 0;
+}
+
+.data-color-field::-webkit-color-swatch {
+    border: none;
+    border-radius: 5px;
+}
+
+input[type = "color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 15rem;
+    height: 2rem;
+    cursor: pointer;
+}
+
+input[type = "color"]:hover {
+    border: none;
+}
+
+input[type=text]:hover {
+    border-color: var(--main-color-primary);
     transition: background-color 1s;
 }
 
 input[type=text]:focus{
     outline: none;
-    border: 1px solid #0063F7;
+    border: 1px solid var(--main-color-primary);
+}
+
+input[disabled] {
+    cursor: not-allowed;
+}
+
+input[disabled][type=text]:hover {
+    border: 1px solid var(--main-color-secondary);
 }
 
 ::placeholder {
     font-size: 1.2em;
+}
+
+.border--success {
+    border: 1px solid var(--main-color-success)
+}
+
+.border--error {
+    border: 1px solid var(--main-color-error)
 }
 
 .button {
@@ -126,24 +174,24 @@ input[type=text]:focus{
 }
 
 .button:hover {
-    background-color: grey;
+    background-color: var(--main-color-secondary);
     transition: 1ms;
 }
 
 .button--primary {
-    background: #0063F7;
+    background: var(--main-color-primary);
 }
 
 .button--success {
-    background: #05A660;
+    background: var(--main-color-success);
 }
 
 .button--error {
-    background: #E53535;
+    background: var(--main-color-error);
 }
 
 .button--encouraging {
-    background: #E57A00;
+    background: var(--main-color-encouraging);
 }
 
 .upload-box {
@@ -154,11 +202,9 @@ input[type=text]:focus{
     outline: none;
 }
 
-input[type="file"] {color: white}
-
 ::-webkit-file-upload-button {
-    color: #F2F2F5;
-    background: #e57a00;
+    color: var(--main-bg-color);
+    background: var(--main-color-encouraging);
     margin: 0 1.2rem 0 0;
     padding: 0.8rem;
     font-size: 12px;
@@ -182,7 +228,7 @@ input[type="file"] {color: white}
     width: 100%;
     height: 30px;
     margin: 1rem 0 1.5rem 0;
-    background: #C4C4C4;
+    background: var(--main-color-secondary);
     overflow: hidden;
 }
 
@@ -203,7 +249,7 @@ input[type="file"] {color: white}
 }
 
 .set-color {
-    background-color: #0063F7;
+    background-color: var(--main-color-primary);
     height: 100%;
 }
 
@@ -212,18 +258,22 @@ input[type="file"] {color: white}
     top: 50%;
     right: 5px;
     transform: translateY(-50%);
-    background: #C4C4C4;
+    background: var(--main-color-secondary);
 }
 
 .creator {
-    position: absolute;
-    width: 100%;
     text-align: center;
+    bottom: 0;
+    width:100%;
 }
 
 .notification {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
     width: 15rem;
-    height: 25%;
+    height: 8rem;
     background-color: #FAFAFC;
     box-shadow: 0 0 6px 4px rgba(85, 87, 112, 0.25);
     margin: 1rem;
@@ -232,9 +282,35 @@ input[type="file"] {color: white}
     border-radius: 5px;
 }
 
+.error-message {
+    color: var(--main-color-error);
+    margin: 0 0 0 0.5rem;
+    font-size: 0.9rem;
+}
+
+.success-message {
+    color: var(--main-color-success);
+    margin: 0 0 0 0.5rem;
+    font-size: 0.9rem;
+}
+
+.color-text {
+    margin-top: -2rem;
+    margin-left: 12rem
+}
+
+.invalid {
+    border-color: red;
+}
+
 /* u.a. in loading.html */
 .info-message {
     font-size: 1.1rem;
     background: none;
     margin-bottom: 1rem;
+}
+
+/* gate-html */
+#gate-body {
+    overflow: hidden;
 }
