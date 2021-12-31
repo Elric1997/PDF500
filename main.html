@@ -15,7 +15,8 @@
             <div class="row">
                 <div class="col-6">
                     <label>
-                        <input id="id" type="text" class="data-field" placeholder="PDF-Nummer eintragen">
+                        <input id="id" type="text" class="data-field" placeholder="PDF-Nummer eintragen" onkeyup="validInputPdfNumber()">
+                        <p id="pdf-text" class="error-message"></p>
                     </label>
                 </div>
                 <div class="col-6">
@@ -28,13 +29,13 @@
                         <h2>Schrift-Parameter</h2>
                         <div class="data-input">
                             <label>
-                                <input id="font-x" type="text" class="data-field" placeholder="x-Koordinate" onkeyup="validation()">
+                                <input id="font-x" type="text" class="data-field" placeholder="x-Koordinate" onkeyup="validInputFontCoordinateX()">
                                 <p id="font-x-text" class="error-message"></p>
                             </label>
                         </div>
                         <div class="data-input">
                             <label>
-                                <input id="font-y" type="text" class="data-field" placeholder="y-Koordinate" onkeyup="validation()">
+                                <input id="font-y" type="text" class="data-field" placeholder="y-Koordinate" onkeyup="validInputFontCoordinateY()">
                                 <p id="font-y-text" class="error-message"></p>
                             </label>
                         </div>
@@ -46,7 +47,7 @@
                         </div>
                         <div class="data-input">
                             <label>
-                                <input id="font-size" type="text" class="data-field" placeholder="Größe festlegen" onkeyup="validation()">
+                                <input id="font-size" type="text" class="data-field" placeholder="Größe festlegen" onkeyup="validInputFontSize()">
                                 <p id="font-size-text" class="error-message"></p>
                             </label>
                         </div>
@@ -63,13 +64,13 @@
                         </div>
                         <div class="data-input">
                             <label>
-                                <input id="box-h" type="text" class="data-field" placeholder="Höhe festlegen" onkeyup="validation()" disabled>
+                                <input id="box-h" type="text" class="data-field" placeholder="Höhe festlegen" onkeyup="validInputBoxHeight()" disabled>
                                 <p id="font-box-h-text" class="error-message"></p>
                             </label>
                         </div>
                         <div class="data-input">
                             <label>
-                                <input id="box-w" type="text" class="data-field" placeholder="Breite festlegen" onkeyup="validation()" disabled>
+                                <input id="box-w" type="text" class="data-field" placeholder="Breite festlegen" onkeyup="validInputBoxWidth()" disabled>
                                 <p id="font-box-w-text" class="error-message"></p>
                             </label>
                         </div>
@@ -102,7 +103,7 @@
         </div>
     </section>
     <!-- Update-Popup -->
-    <!--<div id="notification" class="notification hidden">
+    <div id="notification" class="notification hidden">
         <p id="message" class="info-message"></p>
         <button id="restart-button" style="width: 5rem; height: 2rem; margin-left: 3rem" onClick="restartApp()" class="button button--primary hidden">
             Ausführen
@@ -110,7 +111,7 @@
         <button id="close-button" style="width: 5rem; height: 2rem" class="button button--error" onClick="closeNotification()">
             Schließen
         </button>
-    </div>-->
+    </div>
     <footer>
         <p class="creator">created by Thilo Barth | André Schwarzat with
             <img src="assets/Logo.svg" class="slick-comm-icon" height="14" width="14" alt="Slick-Icon">

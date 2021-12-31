@@ -282,6 +282,10 @@ input[disabled][type=text]:hover {
     border-radius: 5px;
 }
 
+.hidden {
+    display: none;
+}
+
 .error-message {
     color: var(--main-color-error);
     margin: 0 0 0 0.5rem;
