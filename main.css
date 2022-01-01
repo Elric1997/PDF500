@@ -307,6 +307,48 @@ input[disabled][type=text]:hover {
     border-color: red;
 }
 
+.modal-overlay {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgba(0,0,0, 0.8);
+    overflow: hidden;
+}
+
+.modal {
+    position: absolute;
+    bottom: 50%;
+    left: 43.8%;
+    width: 25rem;
+    height: 12rem;
+    border: 2px solid var(--main-color-success);
+    border-radius: 5px;
+}
+
+.modal-headline {
+    text-align: left;
+    padding: 0.5rem;
+    color: white;
+    background-color: var(--main-color-success);
+}
+
+.modal-headline--error {
+    color: var(--main-color-error);
+}
+
+.modal-description {
+    padding: 0.5rem;
+}
+
+.modal-footer {
+    background-color: transparent;
+    padding: 0.5rem;
+    float: right;
+}
+
 /* u.a. in loading.html */
 .info-message {
     font-size: 1.1rem;
