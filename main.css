@@ -320,8 +320,11 @@ input[disabled][type=text]:hover {
 
 .modal {
     position: absolute;
-    bottom: 50%;
-    left: 43.8%;
+    display: table;
+    top: 35%;
+    margin:0 auto;
+    left: 0;
+    right: 0;
     width: 25rem;
     height: 12rem;
     border: 2px solid var(--main-color-success);
