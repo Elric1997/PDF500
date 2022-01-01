@@ -15,7 +15,8 @@
             <div class="row">
                 <div class="col-6">
                     <label>
-                        <input id="id" type="text" class="data-field" placeholder="PDF-Nummer eintragen">
+                        <input id="id" type="text" class="data-field" placeholder="PDF-Nummer eintragen" onkeyup="validInputPdfNumber()">
+                        <p id="pdf-text" class="error-message"></p>
                     </label>
                 </div>
                 <div class="col-6">
@@ -28,13 +29,13 @@
                         <h2>Schrift-Parameter</h2>
                         <div class="data-input">
                             <label>
-                                <input id="font-x" type="text" class="data-field" placeholder="x-Koordinate" onkeyup="validation()">
+                                <input id="font-x" type="text" class="data-field" placeholder="x-Koordinate" onkeyup="validInputFontCoordinateX()">
                                 <p id="font-x-text" class="error-message"></p>
                             </label>
                         </div>
                         <div class="data-input">
                             <label>
-                                <input id="font-y" type="text" class="data-field" placeholder="y-Koordinate" onkeyup="validation()">
+                                <input id="font-y" type="text" class="data-field" placeholder="y-Koordinate" onkeyup="validInputFontCoordinateY()">
                                 <p id="font-y-text" class="error-message"></p>
                             </label>
                         </div>
@@ -46,7 +47,7 @@
                         </div>
                         <div class="data-input">
                             <label>
-                                <input id="font-size" type="text" class="data-field" placeholder="Größe festlegen" onkeyup="validation()">
+                                <input id="font-size" type="text" class="data-field" placeholder="Größe festlegen" onkeyup="validInputFontSize()">
                                 <p id="font-size-text" class="error-message"></p>
                             </label>
                         </div>
@@ -63,13 +64,13 @@
                         </div>
                         <div class="data-input">
                             <label>
-                                <input id="box-h" type="text" class="data-field" placeholder="Höhe festlegen" onkeyup="validation()" disabled>
+                                <input id="box-h" type="text" class="data-field" placeholder="Höhe festlegen" onkeyup="validInputBoxHeight()" disabled>
                                 <p id="font-box-h-text" class="error-message"></p>
                             </label>
                         </div>
                         <div class="data-input">
                             <label>
-                                <input id="box-w" type="text" class="data-field" placeholder="Breite festlegen" onkeyup="validation()" disabled>
+                                <input id="box-w" type="text" class="data-field" placeholder="Breite festlegen" onkeyup="validInputBoxWidth()" disabled>
                                 <p id="font-box-w-text" class="error-message"></p>
                             </label>
                         </div>
@@ -98,11 +99,11 @@
         </div>
         <div class="progress">
             <div class="progress--fill set-color" id="progress-fill"></div>
-            <span class="progress--text">0/0</span>
+            <span class="progress--text" id="progress-text">0/0</span>
         </div>
     </section>
     <!-- Update-Popup -->
-    <!--<div id="notification" class="notification hidden">
+    <div id="notification" class="notification hidden">
         <p id="message" class="info-message"></p>
         <button id="restart-button" style="width: 5rem; height: 2rem; margin-left: 3rem" onClick="restartApp()" class="button button--primary hidden">
             Ausführen
@@ -110,7 +111,7 @@
         <button id="close-button" style="width: 5rem; height: 2rem" class="button button--error" onClick="closeNotification()">
             Schließen
         </button>
-    </div>-->
+    </div>
     <footer>
         <p class="creator">created by Thilo Barth | André Schwarzat with
             <img src="assets/Logo.svg" class="slick-comm-icon" height="14" width="14" alt="Slick-Icon">
@@ -127,6 +128,16 @@
     const ipcRenderer = require('electron').ipcRenderer;
     const signBtn = document.getElementById('sign');
     const previewBtn = document.getElementById('preview');
+    const boxToggle = document.getElementById('box-toggle');
+    let boxToggleState = false;
+
+    boxToggle.addEventListener('change',function(){
+        if(this.checked) {
+            boxToggleState = true;
+        } else {
+            boxToggleState = false;
+        }
+    });
 
     let notification = document.getElementById('notification');
     let message = document.getElementById('message');
@@ -153,19 +164,27 @@
     }
 
     previewBtn.addEventListener('click', function() {
-        let OutString = document.getElementById('directory-in').files[0].path;
-        let newOutString = OutString.replaceAll('\\', '/')
-        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
+        let files = document.getElementById('directory-in').files;
+        let paths = []
+        let names = []
 
-        let inString = document.getElementById('directory-in').files[0].path;
-        let newinString = inString.replaceAll('\\', '/')
-        //newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
+        Array.prototype.forEach.call(files, file => {
+            paths.push(
+                file.path.replaceAll('\\', '/').replace(file.name, '')
+            )
+        })
+
+        Array.prototype.forEach.call(files, file => {
+            names.push(
+                file.name
+            )
+        })
 
         let data = {
             textId : document.getElementById('id').value,
             directory:{
-                in: newinString,
-                out: newOutString
+                in: paths,
+                names: names
             },
             font : {
                 x : document.getElementById('font-x').value,
@@ -174,7 +193,7 @@
                 color : document.getElementById('font-color').value
             },
             box: {
-                toggle: document.getElementById('box-toggle').value,
+                toggle: boxToggleState,
                 h: document.getElementById('box-h').value,
                 w: document.getElementById('box-w').value,
                 color: document.getElementById('box-color').value
@@ -184,19 +203,27 @@
     })
 
     signBtn.addEventListener('click', function () {
-        let OutString = document.getElementById('directory-in').files[0].path;
-        let newOutString = OutString.replaceAll('\\', '/')
-        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
+        let files = document.getElementById('directory-in').files;
+        let paths = []
+        let names = []
 
-        let inString = document.getElementById('directory-in').files[0].path;
-        let newinString = inString.replaceAll('\\', '/')
-        newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
+        Array.prototype.forEach.call(files, file => {
+            paths.push(
+                file.path.replaceAll('\\', '/').replace(file.name, '')
+            )
+        })
+
+        Array.prototype.forEach.call(files, file => {
+            names.push(
+                file.name
+            )
+        })
 
         let data = {
             textId : document.getElementById('id').value,
             directory:{
-                in: newinString,
-                out: newOutString
+                in: paths,
+                names: names
             },
             font : {
                 x : document.getElementById('font-x').value,
@@ -205,7 +232,7 @@
                 color : document.getElementById('font-color').value
             },
             box: {
-                toggle: document.getElementById('box-toggle').value,
+                toggle: boxToggleState,
                 h: document.getElementById('box-h').value,
                 w: document.getElementById('box-w').value,
                 color: document.getElementById('box-color').value
@@ -221,6 +248,20 @@
         let pdfDataUri = JSON.parse(arg)
         document.getElementById('pdf').src = pdfDataUri;
     })
+
+    let processBarFill = 0;
+    document.getElementById('progress-fill').style.width = 0 + "%"
+
+    ipcRenderer.on('updateProgressBar', function (evt, message) {
+        processBarFill = processBarFill + 1
+        document.getElementById('progress-text').innerText = processBarFill + '/' + document.getElementById('directory-in').files.length
+        let processBarFillPercentage = 100 / document.getElementById('directory-in').files.length * processBarFill
+        document.getElementById('progress-fill').style.width = processBarFillPercentage + "%"
+    });
+
+    ipcRenderer.on('triggerClientModal', function (evt, message) {
+        console.log(message)
+    });
 
     function changeBGColor() {
         var cols = document.getElementsByClassName('col1');

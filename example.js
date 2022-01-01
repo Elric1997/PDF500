@@ -1,65 +1,100 @@
 "use strict"
 
 /** TODO: Validierung zwecks Code-Stil überarbeiten */
-const validation = () => {
+const numberPattern = /^[0-9]*$/;
+const pdfNumberPattern = /^(.*?)/;
+const errorText = "Bitte nur Zahlen eingeben";
+
+const validInputPdfNumber = () => {
+    const inputPdfNumber = document.getElementById("id");
+    let errorMessagePdfNumber = document.getElementById('pdf-text');
+
+    if (inputPdfNumber.value === "")
+    {
+        errorMessagePdfNumber.innerHTML = "Bitte eine PDF-Nummer eingeben";
+        inputPdfNumber.classList.add("invalid");
+    }
+    else if (inputPdfNumber.value.match(pdfNumberPattern))
+    {
+        errorMessagePdfNumber.innerHTML = "";
+        inputPdfNumber.classList.remove("invalid");
+    }
+    else
+    {
+        errorMessagePdfNumber.innerHTML = errorText;
+        inputPdfNumber.classList.add("invalid")
+    }
+}
+
+const validInputFontCoordinateX = () => {
     const inputFontCoordinateX = document.getElementById("font-x");
-    const inputFontCoordinateY = document.getElementById("font-y");
-    const inputFontSize = document.getElementById("font-size");
-    const inputBoxHeight = document.getElementById("box-h");
-    const inputBoxWidth= document.getElementById("box-w");
-
     let errorMessageFontX = document.getElementById('font-x-text');
-    let errorMessageFontY = document.getElementById('font-y-text');
-    let errorMessageSize = document.getElementById('font-size-text');
-    let errorMessageBoxHeight = document.getElementById('font-box-h-text');
-    let errorMessageBoxWidth = document.getElementById('font-box-w-text');
-    const pattern = /^[0-9]*$/;
 
-    if (inputFontCoordinateX.value.match(pattern))
+    if (inputFontCoordinateX.value.match(numberPattern))
     {
         errorMessageFontX.innerHTML = "";
         inputFontCoordinateX.classList.remove("invalid");
     }
     else
     {
-        errorMessageFontX.innerHTML = "Bitte nur Zahlen eingeben";
+        errorMessageFontX.innerHTML = errorText;
         inputFontCoordinateX.classList.add("invalid")
     }
+}
 
-    if (inputFontCoordinateY.value.match(pattern))
+const validInputFontCoordinateY = () => {
+    const inputFontCoordinateY = document.getElementById("font-y");
+    let errorMessageFontY = document.getElementById('font-y-text');
+
+    if (inputFontCoordinateY.value.match(numberPattern))
     {
         errorMessageFontY.innerHTML = "";
         inputFontCoordinateY.classList.remove("invalid");
     }
     else
     {
-        errorMessageFontY.innerHTML = "Bitte nur Zahlen eingeben";
+        errorMessageFontY.innerHTML = errorText;
         inputFontCoordinateY.classList.add("invalid")
     }
+}
 
-    if (inputFontSize.value.match(pattern))
+const validInputFontSize = () => {
+    const inputFontSize = document.getElementById("font-size");
+    let errorMessageSize = document.getElementById('font-size-text');
+
+    if (inputFontSize.value.match(numberPattern))
     {
         errorMessageSize.innerHTML = "";
         inputFontSize.classList.remove("invalid");
     }
     else
     {
-        errorMessageSize.innerHTML = "Bitte nur Zahlen eingeben";
+        errorMessageSize.innerHTML = errorText;
         inputFontSize.classList.add("invalid")
     }
+}
 
-    if (inputBoxHeight.value.match(pattern))
+const validInputBoxHeight = () => {
+    const inputBoxHeight = document.getElementById("box-h");
+    let errorMessageBoxHeight = document.getElementById('font-box-h-text');
+
+    if (inputBoxHeight.value.match(numberPattern))
     {
         errorMessageBoxHeight.innerHTML = "";
         inputBoxHeight.classList.remove("invalid");
     }
     else
     {
-        errorMessageBoxHeight.innerHTML = "Bitte nur Zahlen eingeben";
+        errorMessageBoxHeight.innerHTML = errorText;
         inputBoxHeight.classList.add("invalid")
     }
+}
 
-    if (inputBoxWidth.value.match(pattern))
+const validInputBoxWidth = () => {
+    const inputBoxWidth= document.getElementById("box-w");
+    let errorMessageBoxWidth = document.getElementById('font-box-w-text');
+
+    if (inputBoxWidth.value.match(numberPattern))
     {
         errorMessageBoxWidth.innerHTML = "";
         inputBoxWidth.classList.remove("invalid");
