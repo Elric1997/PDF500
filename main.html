@@ -269,6 +269,8 @@
         document.getElementById('progress-text').innerText = processBarFill + '/' + document.getElementById('directory-in').files.length
         let processBarFillPercentage = 100 / document.getElementById('directory-in').files.length * processBarFill
         document.getElementById('progress-fill').style.width = processBarFillPercentage + "%"
+
+
     });
 
     ipcRenderer.on('triggerClientModal', function (evt, message) {

@@ -235,6 +235,10 @@ function MainWindow() {
         autoUpdater.checkForUpdates();
     });
 
+    if (process.platform === 'darwin') {
+        app.dock.setIcon(path.join(__dirname, '/assets/Logo.png'));
+    }
+
     //AUTOUPDATE
 
     autoUpdater.on('update-available', () => {
