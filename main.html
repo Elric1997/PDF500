@@ -140,6 +140,7 @@
     const previewBtn = document.getElementById('preview');
     const boxToggle = document.getElementById('box-toggle');
     let boxToggleState = false;
+    let errorList = [];
 
     boxToggle.addEventListener('change',function(){
         if(this.checked) {
@@ -216,6 +217,7 @@
         let files = document.getElementById('directory-in').files;
         let paths = []
         let names = []
+        errorList = [];
 
         Array.prototype.forEach.call(files, file => {
             paths.push(
@@ -270,7 +272,7 @@
     });
 
     ipcRenderer.on('triggerClientModal', function (evt, message) {
-        console.log(message)
+        errorList.push(message)
     });
 
     function changeBGColor() {
