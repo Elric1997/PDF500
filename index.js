@@ -239,6 +239,19 @@ function MainWindow() {
         app.dock.setIcon(path.join(__dirname, '/assets/Logo.png'));
     }
 
+    setTimeout(() => {
+        app.dock.bounce();
+     }, 5000);
+
+    mainWindow.on('blur', () => {
+        const badgeString = app.dock.getBadge();
+            if (badgeString === '') {
+                app.dock.setBadge('1');
+            } else {
+                app.dock.setBadge((parseInt(badgeString) + 1).toString());
+            }
+    });
+
     //AUTOUPDATE
 
     autoUpdater.on('update-available', () => {
