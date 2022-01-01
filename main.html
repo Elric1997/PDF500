@@ -102,6 +102,21 @@
             <span class="progress--text" id="progress-text">0/0</span>
         </div>
     </section>
+    <footer>
+        <p class="creator">created by Thilo Barth | André Schwarzat with
+            <img src="assets/Logo.svg" class="slick-comm-icon" height="14" width="14" alt="Slick-Icon">
+        </p>
+    </footer>
+    <!-- Success-Error Modal -->
+    <div id="triggerClientModal" class="modal-overlay">
+        <div class="modal">
+            <h2 id="modal-headline" class="modal-headline">Erfolgreich verarbeitet!</h2><hr>
+            <p id="modal-description" class="modal-description">Stundenlange, mühesame Arbeit wurden in einer Sekunde erledigt! Glückwunsch, du bist wirklich produktiv, mach erstmal eine Pause.</p>
+            <div class="modal-footer">
+                <button class="button button--success" style="width: 5rem" onclick="closeModal()">Schließen</button>
+            </div>
+        </div>
+    </div>
     <!-- Update-Popup -->
     <div id="notification" class="notification hidden">
         <p id="message" class="info-message"></p>
@@ -112,11 +127,6 @@
             Schließen
         </button>
     </div>
-    <footer>
-        <p class="creator">created by Thilo Barth | André Schwarzat with
-            <img src="assets/Logo.svg" class="slick-comm-icon" height="14" width="14" alt="Slick-Icon">
-        </p>
-    </footer>
 </main>
 <!-- Insert this line above script imports  -->
 <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>

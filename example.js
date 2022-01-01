@@ -1,6 +1,5 @@
 "use strict"
 
-/** TODO: Validierung zwecks Code-Stil überarbeiten */
 const numberPattern = /^[0-9]*$/;
 const pdfNumberPattern = /^(.*?)/;
 const errorText = "Bitte nur Zahlen eingeben";
@@ -106,6 +105,10 @@ const validInputBoxWidth = () => {
     }
 }
 
+/**
+ * Funktion zur Überprüfung, ob die Checkbox geklickt wurde oder nicht
+ * Initial wurde "disabled" in den Eingabefeldern gesetzt
+*/
 const detectCheckboxState = () => {
     const checkbox = document.getElementById("box-toggle");
     const boxHeight = document.getElementById("box-h");
@@ -140,4 +143,8 @@ const changeFontColorCode = () => {
     const colorHexCode = document.getElementById("color-font-code");
 
     colorHexCode.innerHTML = colorField.value.toUpperCase();
+}
+
+const closeModal = () => {
+    document.getElementById("triggerClientModal").style.display = "none";
 }
