@@ -99,7 +99,7 @@
         </div>
         <div class="progress">
             <div class="progress--fill set-color" id="progress-fill"></div>
-            <span class="progress--text">0/0</span>
+            <span class="progress--text" id="progress-text">0/0</span>
         </div>
     </section>
     <!-- Update-Popup -->
@@ -128,6 +128,16 @@
     const ipcRenderer = require('electron').ipcRenderer;
     const signBtn = document.getElementById('sign');
     const previewBtn = document.getElementById('preview');
+    const boxToggle = document.getElementById('box-toggle');
+    let boxToggleState = false;
+
+    boxToggle.addEventListener('change',function(){
+        if(this.checked) {
+            boxToggleState = true;
+        } else {
+            boxToggleState = false;
+        }
+    });
 
     let notification = document.getElementById('notification');
     let message = document.getElementById('message');
@@ -154,19 +164,27 @@
     }
 
     previewBtn.addEventListener('click', function() {
-        let OutString = document.getElementById('directory-in').files[0].path;
-        let newOutString = OutString.replaceAll('\\', '/')
-        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
+        let files = document.getElementById('directory-in').files;
+        let paths = []
+        let names = []
 
-        let inString = document.getElementById('directory-in').files[0].path;
-        let newinString = inString.replaceAll('\\', '/')
-        //newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
+        Array.prototype.forEach.call(files, file => {
+            paths.push(
+                file.path.replaceAll('\\', '/').replace(file.name, '')
+            )
+        })
+
+        Array.prototype.forEach.call(files, file => {
+            names.push(
+                file.name
+            )
+        })
 
         let data = {
             textId : document.getElementById('id').value,
             directory:{
-                in: newinString,
-                out: newOutString
+                in: paths,
+                names: names
             },
             font : {
                 x : document.getElementById('font-x').value,
@@ -175,7 +193,7 @@
                 color : document.getElementById('font-color').value
             },
             box: {
-                toggle: document.getElementById('box-toggle').value,
+                toggle: boxToggleState,
                 h: document.getElementById('box-h').value,
                 w: document.getElementById('box-w').value,
                 color: document.getElementById('box-color').value
@@ -185,19 +203,27 @@
     })
 
     signBtn.addEventListener('click', function () {
-        let OutString = document.getElementById('directory-in').files[0].path;
-        let newOutString = OutString.replaceAll('\\', '/')
-        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
+        let files = document.getElementById('directory-in').files;
+        let paths = []
+        let names = []
 
-        let inString = document.getElementById('directory-in').files[0].path;
-        let newinString = inString.replaceAll('\\', '/')
-        newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
+        Array.prototype.forEach.call(files, file => {
+            paths.push(
+                file.path.replaceAll('\\', '/').replace(file.name, '')
+            )
+        })
+
+        Array.prototype.forEach.call(files, file => {
+            names.push(
+                file.name
+            )
+        })
 
         let data = {
             textId : document.getElementById('id').value,
             directory:{
-                in: newinString,
-                out: newOutString
+                in: paths,
+                names: names
             },
             font : {
                 x : document.getElementById('font-x').value,
@@ -206,7 +232,7 @@
                 color : document.getElementById('font-color').value
             },
             box: {
-                toggle: document.getElementById('box-toggle').value,
+                toggle: boxToggleState,
                 h: document.getElementById('box-h').value,
                 w: document.getElementById('box-w').value,
                 color: document.getElementById('box-color').value
@@ -222,6 +248,23 @@
         let pdfDataUri = JSON.parse(arg)
         document.getElementById('pdf').src = pdfDataUri;
     })
+
+    let processBarFill = 0;
+    document.getElementById('progress-fill').style.width = 0 + "%"
+
+    ipcRenderer.on('updateProgressBar', function (evt, message) {
+        processBarFill = processBarFill + 1
+        document.getElementById('progress-text').innerText = processBarFill + '/' + document.getElementById('directory-in').files.length
+        let processBarFillPercentage = 100 / document.getElementById('directory-in').files.length * processBarFill
+        document.getElementById('progress-fill').style.width = processBarFillPercentage + "%"
+    });
+
+    ipcRenderer.on('triggerClientModal', function (evt, message) {
+        processBarFill = processBarFill + 1
+        document.getElementById('progress-text').innerText = processBarFill + '/' + document.getElementById('directory-in').files.length
+        let processBarFillPercentage = 100 / document.getElementById('directory-in').files.length * processBarFill
+        document.getElementById('progress-fill').style.width = processBarFillPercentage + "%"
+    });
 
     function changeBGColor() {
         var cols = document.getElementsByClassName('col1');

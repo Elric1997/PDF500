@@ -9,56 +9,78 @@ const fetch = require("node-fetch")
 const { autoUpdater } = require('electron-updater');
 const Store = require('electron-store');
 
-function sniffDirec(data){
-    console.log(data)
-    let files = fs.readdirSync(data.directory.in)
-    let outPath = data.directory.out;
-    console.log(files)
-    files.forEach(function (file) {
-        fs.readFile(data.directory.in + '/' + file, (err,data) => {
+function getPdf(args){
+    console.log(args)
+    for(let i = 0; i < args.directory.in.length; i++) {
+        fs.readFile(args.directory.in[i] + '/' + args.directory.names[i], (err,data) => {
             if(err) throw err;
-            createPdf(data, file, outPath)
+            createPdf(args, data, args.directory.names[i], args.directory.in[i])
         })
-    });
+    }
 }
 
-async function createPdf(document, name, out) {
-    console.log(out);
-    const existingPdfBytes = document;
-    const pdfDoc = await PDFDocument.load(existingPdfBytes, {ignoreEncryption: true})
-    //const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman)
+function hexToRGB(h) {
+    let r = 0, g = 0, b = 0;
 
-    //const page = pdfDoc.addPage()
+    // 3 digits
+    if (h.length == 4) {
+        r = "0x" + h[1] + h[1];
+        g = "0x" + h[2] + h[2];
+        b = "0x" + h[3] + h[3];
+
+        // 6 digits
+    } else if (h.length == 7) {
+        r = "0x" + h[1] + h[2];
+        g = "0x" + h[3] + h[4];
+        b = "0x" + h[5] + h[6];
+    }
+
+    return rgb(parseFloat(r/255),parseFloat(g/255),parseFloat(b/255));
+}
+
+async function createPdf(args, file, name, path) {
+
+    const existingPdfBytes = file;
+    const pdfDoc = await PDFDocument.load(existingPdfBytes, {ignoreEncryption: true})
+
     const pages = pdfDoc.getPages()
     const firstPage = pages[0]
     const { width, height } = firstPage.getSize()
-    const fontSize = 8
-    firstPage.drawRectangle({
-        x: 5,
-        y: height - 2.5 * fontSize,
-        width: 85,
-        height: 15,
-        borderWidth: 1,
-        borderColor: rgb(1,0,0),
-        color: rgb(1,1,1),
-    });
 
-    firstPage.drawText('c/o ECHT-ID 157002', {
-        x: 10,
-        y: height - 2 * fontSize,
+    const fontSize = parseInt(args.font.size)
+
+    if(args.box.toggle === true) {
+        firstPage.drawRectangle({
+            x: parseInt(args.font.x),
+            y: parseInt(args.font.y),
+            width: parseInt(args.box.w),
+            height: parseInt(args.box.h),
+            borderWidth: 1,
+            borderColor: hexToRGB(args.box.color),
+            color: rgb(1, 1, 1),
+        });
+    }
+    firstPage.drawText(args.textId, {
+        x: parseInt(args.font.x),
+        y: parseInt(args.font.y),
         size: fontSize,
         //font: timesRomanFont,
-        color: rgb(0, 0, 0),
+        color: hexToRGB(args.font.color), //TODO COLOR CODE TO RGB ?
     })
 
-    fs.promises.mkdir(out, { recursive: true }).catch(console.error);
-    fs.writeFileSync(out + '/' + name , await pdfDoc.save(), { flag: 'wx' });
+    fs.promises.mkdir(path + '/output/', { recursive: true }).catch(console.error);
+    try {
+        fs.writeFileSync(path + '/output/' + name, await pdfDoc.save(), {flag: 'wx'});
+    } catch (err){
+        mainWindow.webContents.send('triggerClientModal', {'SAVED': 'File Saved'});
+    }
+    mainWindow.webContents.send('updateProgressBar', {'SAVED': 'File Saved'});
 }
 
-async function previewPDF(document, name, data) {
+async function previewPDF(args) {
     
 
-    let existingPdfBytes = fs.readFileSync(data.directory.in, (err, data) => {
+    let existingPdfBytes = fs.readFileSync(args.directory.in[0] + '/' + args.directory.names[0] , (err, data) => {
         if(err) throw err;
 
         return data
@@ -69,23 +91,26 @@ async function previewPDF(document, name, data) {
     const pages = pdfDoc.getPages()
     const firstPage = pages[0]
     const { width, height } = firstPage.getSize()
-    const fontSize = parseInt(data.font.size)
-    firstPage.drawRectangle({
-        x: parseInt(data.font.x),
-        y: height - 2.5 * fontSize,
-        width: parseInt(data.box.w),
-        height: parseInt(data.box.h),
-        borderWidth: 1,
-        borderColor: rgb(1,0,0),
-        color: rgb(1,1,1),
-    });
 
-    firstPage.drawText(data.textId, {
-        x: parseInt(data.font.x),
-        y: height - 2 * fontSize,
+    const fontSize = parseInt(args.font.size)
+
+    if(args.box.toggle === true) {
+        firstPage.drawRectangle({
+            x: parseInt(args.font.x),
+            y: parseInt(args.font.y),
+            width: parseInt(args.box.w),
+            height: parseInt(args.box.h),
+            borderWidth: 1,
+            borderColor: hexToRGB(args.box.color),
+            color: rgb(1, 1, 1),
+        });
+    }
+    firstPage.drawText(args.textId, {
+        x: parseInt(args.font.x),
+        y: parseInt(args.font.y),
         size: fontSize,
         //font: timesRomanFont,
-        color: rgb(0, 0, 0),
+        color: hexToRGB(args.font.color), //TODO COLOR CODE TO RGB ?
     })
 
     //fs.writeFileSync('./out/' + name , await pdfDoc.save());
@@ -185,8 +210,10 @@ async function validate(code, createWindow, gateWindow){
 
 //MAIN APP STUFF
 
+let mainWindow
+
 function MainWindow() {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1000,
         height: 600,
         minHeight: 600,
@@ -201,7 +228,7 @@ function MainWindow() {
         },
     });
     mainWindow.loadURL(`file://${__dirname}/main.html`);
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
     mainWindow.once('ready-to-show', () => {
         console.log('looking for update')
@@ -232,8 +259,7 @@ app.on('window-all-closed', function () {
 // IPC STUFF
 
 ipcMain.on("sign",function (event, arg) {
-    console.log(arg)
-    sniffDirec(arg);
+    getPdf(arg)
 });
 
 ipcMain.on('restart_app', () => {
@@ -241,5 +267,5 @@ ipcMain.on('restart_app', () => {
 });
 
 ipcMain.on('preview', async function(event, args){
-    event.reply('asynchronous-reply', await previewPDF('', '', args))
+    event.reply('asynchronous-reply', await previewPDF(args))
 })

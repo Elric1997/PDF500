@@ -239,7 +239,7 @@ input[disabled][type=text]:hover {
     background: repeating-linear-gradient(130deg, #0063F7 5px, #0063F7 12px, #007DFF 10px, #007DFF 20px);
     background-size: 20px;
     animation: move 0.9s linear infinite;
-    transition: all 0.2s;
+    transition: all 0s;
 }
 
 @keyframes move {
