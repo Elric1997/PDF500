@@ -72,9 +72,9 @@ async function createPdf(args, file, name, path) {
     try {
         fs.writeFileSync(path + '/output/' + name, await pdfDoc.save(), {flag: 'wx'});
     } catch (err){
-        mainWindow.webContents.send('triggerClientModal', {'SAVED': 'File Saved'});
+        mainWindow.webContents.send('triggerClientModal', {'Error': err});
     }
-    mainWindow.webContents.send('updateProgressBar', {'SAVED': 'File Saved'});
+    mainWindow.webContents.send('updateProgressBar', {'Written': 'File written'});
 }
 
 async function previewPDF(args) {

@@ -23,7 +23,7 @@
     <input id="box-w" placeholder="box-w">
     <input id="box-color" placeholder="box-color">
 
-    <button id="sign">PDF´s beschreiben</button>
+    <canvas id="myCanvas" width="300" height="300"></canvas>
 
     <iframe id="pdf" style="width: 100%; height: 100%;"></iframe>
 
@@ -38,23 +38,46 @@
 <script>if (window.module) module = window.module;</script>
 <script type="text/javascript">
     const ipcRenderer = require('electron').ipcRenderer;
-    const signBtn = document.getElementById('sign');
     const previewBtn = document.getElementById('preview');
 
-    previewBtn.addEventListener('click', function() {
-        let OutString = document.getElementById('directory-in').files[0].path;
-        let newOutString = OutString.replaceAll('\\', '/')
-        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
+    function draw() {
+        let ctx = document.getElementById('myCanvas').getContext('2d');
+        let canvas = document.getElementById("myCanvas");
+        ctx.clearRect(0, 0, 300, 300);
+        ctx.font = document.getElementById('font-size').value + 'px serif';
+        ctx.fillStyle = document.getElementById('font-color').value;
+        ctx.textAlign = "center";
+        ctx.fillText(document.getElementById('id').value, canvas.width/2 + document.getElementById('box-w').value / 2, canvas.height/2 + document.getElementById('box-h').value / 2);
 
-        let inString = document.getElementById('directory-in').files[0].path;
-        let newinString = inString.replaceAll('\\', '/')
-        newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
+        ctx.beginPath();
+        ctx.rect(canvas.height/2, canvas.width/2, document.getElementById('box-h').value, document.getElementById('box-w').value);
+        ctx.strokeStyle = document.getElementById('font-color').value;
+        ctx.textAlign = "center";
+        ctx.stroke()
+    }
+
+    previewBtn.addEventListener('click', function() {
+        let files = document.getElementById('directory-in').files;
+        let paths = []
+        let names = []
+
+        Array.prototype.forEach.call(files, file => {
+            paths.push(
+                file.path.replaceAll('\\', '/').replace(file.name, '')
+            )
+        })
+
+        Array.prototype.forEach.call(files, file => {
+            names.push(
+                file.name
+            )
+        })
 
         let data = {
             textId : document.getElementById('id').value,
             directory:{
-                in: newinString,
-                out: newOutString
+                in: paths,
+                names: names
             },
             font : {
                 x : document.getElementById('font-x').value,
@@ -63,7 +86,7 @@
                 color : document.getElementById('font-color').value
             },
             box: {
-                toggle: document.getElementById('box-toggle').value,
+                toggle: boxToggleState,
                 h: document.getElementById('box-h').value,
                 w: document.getElementById('box-w').value,
                 color: document.getElementById('box-color').value
@@ -72,44 +95,6 @@
         ipcRenderer.send('preview', data);
     })
 
-    signBtn.addEventListener('click', function () {
-        let OutString = document.getElementById('directory-in').files[0].path;
-        let newOutString = OutString.replaceAll('\\', '/')
-        newOutString = newOutString.replace(document.getElementById('directory-in').files[0].name, 'output')
-
-        let inString = document.getElementById('directory-in').files[0].path;
-        let newinString = inString.replaceAll('\\', '/')
-        newinString = newinString.replace(document.getElementById('directory-in').files[0].name, '')
-
-        let data = {
-            textId : document.getElementById('id').value,
-            directory:{
-                in: newinString,
-                out: newOutString
-            },
-            font : {
-                x : document.getElementById('font-x').value,
-                y : document.getElementById('font-y').value,
-                size : document.getElementById('font-size').value,
-                color : document.getElementById('font-color').value
-            },
-            box: {
-                toggle: document.getElementById('box-toggle').value,
-                h: document.getElementById('box-h').value,
-                w: document.getElementById('box-w').value,
-                color: document.getElementById('box-color').value
-            }
-        }
-
-        ipcRenderer.send("sign", data);
-    });
-
-
-    ipcRenderer.on('asynchronous-reply', (event, arg) => {
-        //console.log(arg) // prints "pong"
-        let pdfDataUri = JSON.parse(arg)
-        document.getElementById('pdf').src = pdfDataUri;
-    })
 </script>
 </body>
 </html>
