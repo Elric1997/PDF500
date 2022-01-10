@@ -108,7 +108,7 @@
         </p>
     </footer>
     <!-- Success-Error Modal -->
-    <div id="triggerClientModal" class="modal-overlay">
+    <div id="triggerClientModal" class="modal-overlay hidden">
         <div class="modal">
             <h2 id="modal-headline" class="modal-headline">Erfolgreich verarbeitet!</h2><hr>
             <p id="modal-description" class="modal-description">Stundenlange, mühesame Arbeit wurden in einer Sekunde erledigt! Glückwunsch, du bist wirklich produktiv, mach erstmal eine Pause.</p>
@@ -214,6 +214,9 @@
     })
 
     signBtn.addEventListener('click', function () {
+        let processBarFill = 0;
+        document.getElementById('progress-fill').style.width = processBarFill + "%"
+
         let files = document.getElementById('directory-in').files;
         let paths = []
         let names = []

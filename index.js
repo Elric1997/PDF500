@@ -51,8 +51,8 @@ async function createPdf(args, file, name, path) {
 
     if(args.box.toggle === true) {
         firstPage.drawRectangle({
-            x: parseInt(args.font.x),
-            y: parseInt(args.font.y),
+            x: parseInt(args.font.x - 5),
+            y: parseInt(height - args.font.y - 10),
             width: parseInt(args.box.w),
             height: parseInt(args.box.h),
             borderWidth: 1,
@@ -62,7 +62,7 @@ async function createPdf(args, file, name, path) {
     }
     firstPage.drawText(args.textId, {
         x: parseInt(args.font.x),
-        y: parseInt(args.font.y),
+        y: parseInt(height - args.font.y),
         size: fontSize,
         //font: timesRomanFont,
         color: hexToRGB(args.font.color), //TODO COLOR CODE TO RGB ?
@@ -96,8 +96,8 @@ async function previewPDF(args) {
 
     if(args.box.toggle === true) {
         firstPage.drawRectangle({
-            x: parseInt(args.font.x),
-            y: parseInt(args.font.y),
+            x: parseInt(args.font.x - 5),
+            y: parseInt(height - args.font.y - 10),
             width: parseInt(args.box.w),
             height: parseInt(args.box.h),
             borderWidth: 1,
@@ -107,7 +107,7 @@ async function previewPDF(args) {
     }
     firstPage.drawText(args.textId, {
         x: parseInt(args.font.x),
-        y: parseInt(args.font.y),
+        y: parseInt(height - args.font.y),
         size: fontSize,
         //font: timesRomanFont,
         color: hexToRGB(args.font.color), //TODO COLOR CODE TO RGB ?
@@ -228,7 +228,7 @@ function MainWindow() {
         },
     });
     mainWindow.loadURL(`file://${__dirname}/main.html`);
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     mainWindow.once('ready-to-show', () => {
         console.log('looking for update')
@@ -238,19 +238,6 @@ function MainWindow() {
     if (process.platform === 'darwin') {
         app.dock.setIcon(path.join(__dirname, '/assets/Logo.png'));
     }
-
-    setTimeout(() => {
-        app.dock.bounce();
-     }, 5000);
-
-    mainWindow.on('blur', () => {
-        const badgeString = app.dock.getBadge();
-            if (badgeString === '') {
-                app.dock.setBadge('1');
-            } else {
-                app.dock.setBadge((parseInt(badgeString) + 1).toString());
-            }
-    });
 
     //AUTOUPDATE
 
